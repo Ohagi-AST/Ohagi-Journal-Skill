@@ -12,7 +12,7 @@
 
 # Reference Checker Skill｜参考文献核查 Skill
 
-🌐 Language: 中文 | [English](README.md)
+🌐 Language: 中文 | [English](README.en.md)
 
 **不要让一条假文献毁掉整篇论文的可信度。**
 
@@ -268,6 +268,13 @@ reference-checker-skill/
 ## 安装与使用
 
 下载或克隆本仓库后，将文件夹放入支持 Skill 工作流的 AI 环境中。
+
+在 Claude Code 中（在本仓库根目录执行）：
+
+```bash
+mkdir -p ~/.claude/skills
+cp -R skills/reference-checker ~/.claude/skills/
+```
 
 核心文件是：
 

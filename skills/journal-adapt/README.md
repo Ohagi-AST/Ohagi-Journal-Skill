@@ -16,17 +16,17 @@ The generated rules are reviewable before any manuscript revision starts.
 
 ## Install
 
-For Claude Code:
+For Claude Code (run from the repository root):
 
 ```bash
-mkdir -p ~/.claude/skills/journal-adapt
-cp -R skill/* ~/.claude/skills/journal-adapt/
+mkdir -p ~/.claude/skills
+cp -R skills/journal-adapt ~/.claude/skills/
 ```
 
 For Codex:
 
 - If your Codex setup supports custom skills, install this folder as `journal-adapt`.
-- If not, keep this repository open and ask Codex to follow `skill/SKILL.md` directly.
+- If not, keep this repository open and ask Codex to follow `SKILL.md` directly.
 
 See `docs/INSTALLATION.md` for PDF conversion and MinerU troubleshooting. See `docs/STATIC_SKILL_RECOMMENDATIONS.md` for optional static base skill recommendations.
 

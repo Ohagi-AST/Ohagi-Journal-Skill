@@ -1,8 +1,4 @@
 <p align="center">
-  <img src="assets/cover.png" alt="Reference Checker Skill Cover" width="800">
-</p>
-
-<p align="center">
   <a href="README.md">
     <img src="https://img.shields.io/badge/语言-中文-green" alt="中文">
   </a>
@@ -179,6 +175,13 @@ reference-checker-skill/
 ## Installation
 
 Download or clone this repository, then place the folder in your AI skill directory if your environment supports skill-based workflows.
+
+For Claude Code (run from the repository root):
+
+```bash
+mkdir -p ~/.claude/skills
+cp -R skills/reference-checker ~/.claude/skills/
+```
 
 The core file is:
 

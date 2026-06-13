@@ -16,8 +16,8 @@ You only need a PDF converter when your corpus or manuscript is in PDF form. If 
 From the repository root:
 
 ```bash
-mkdir -p ~/.claude/skills/journal-adapt
-cp -R skill/* ~/.claude/skills/journal-adapt/
+mkdir -p ~/.claude/skills
+cp -R skills/journal-adapt ~/.claude/skills/
 ```
 
 Then invoke:
