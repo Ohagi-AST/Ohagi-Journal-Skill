@@ -1,6 +1,6 @@
 # Ohagi-Journal-Skill
 
-> 一套面向 **「研究已完成 → 开始把成果写成正式英文期刊级论文（或学位论文正文）」** 这一步的可复用写作框架，配合 [Claude Code](https://claude.com/claude-code) 的 skill 机制使用。
+> 一套面向 **「研究已完成 → 开始把成果写成正式英文期刊级论文（或学位论文正文）」** 这一步的可复用写作框架。三个组件都是**纯 Markdown skill**，可配合 [Claude Code](https://claude.com/claude-code)、Codex 等任何支持 skill 机制的 AI agent 使用（不支持 skill 文件夹的环境，也可直接让 agent 读对应的 `SKILL.md` 执行）。
 
 把 agent harness 的设计思路 —— *Rules-as-spec（规则即规范）＋ Verification-loop（验证闭环）＋ Memory（记忆防漂移）* —— 落到论文成稿的全过程：从锁定目标期刊、搭骨架、逐节写、控制主张强度，到引用穷尽核验和审稿人预演。
 
@@ -37,11 +37,11 @@ Ohagi-Journal-Skill/
 
 ---
 
-## 怎么用（配合 Claude Code）
+## 怎么用
 
 ### 1. 安装三个 skill
 
-把 `skills/` 下三个文件夹复制到 Claude Code 的 skill 目录（每个 skill 都自包含，装在哪都能跑）：
+每个 skill 都自包含、装在哪都能跑。以 **Claude Code** 为例，把 `skills/` 下三个文件夹复制到它的 skill 目录：
 
 ```bash
 # 在仓库根目录执行
@@ -51,12 +51,13 @@ cp -R skills/reference-checker  ~/.claude/skills/
 cp -R skills/journal-adapt      ~/.claude/skills/
 ```
 
+> **其他 agent（Codex 等）**：装进各自的 skill / 自定义指令目录即可；若环境不支持 skill 文件夹，直接让 agent 读取对应文件夹下的 `SKILL.md` 并按其执行，效果相同。
 > `journal-drafting` 已**自带母版规则书**（`起草框架母版.md` + `references/`），无需任何额外放置或配置。
 > `journal-adapt` 的部分功能（PDF→Markdown）依赖 MinerU；若你的语料已是 Markdown/文本则无需安装。详见 `skills/journal-adapt/docs/INSTALLATION.md`。
 
 ### 2. 开始起草
 
-在 Claude Code 里描述你的需求（触发词例：「开始起草」「写成期刊论文」「按期刊标准整理」），`journal-drafting` 会：
+向你的 agent 描述需求（触发词例：「开始起草」「写成期刊论文」「按期刊标准整理」），`journal-drafting` 会：
 
 1. 判断档位（期刊投稿 / 学位论文）；
 2. 带你逐项填「第 0 层 SPEC」（目标刊、层级现实性、结构母本 3–5 篇 —— 三个硬闸）；
