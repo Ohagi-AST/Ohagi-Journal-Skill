@@ -12,8 +12,8 @@
 
 整套东西分两层：
 
-1. **母版规则书 + 风格层**（`journal-framework/`）—— 原创。一份跨论文复用的规则书：每开一篇新论文只重填「第 0 层 SPEC 槽位」，通用硬规则（1–9）永不改、所有论文共用。
-2. **三个可调用的 skill**（`skills/`）—— 一个原创薄壳 + 两个第三方 MIT 工具，把流程串起来。
+1. **母版规则书 + 风格层**（`skills/journal-drafting/英文期刊规则.md` 及其 `references/`）—— 原创。一份跨论文复用的规则书：每开一篇新论文只重填「第 0 层 SPEC 槽位」，通用硬规则（1–9）永不改、所有论文共用。
+2. **三个可调用的 skill**（`skills/`）—— 一个原创编排器（自带上面的母版）+ 两个第三方 MIT 工具，把流程串起来。
 
 设计哲学：**第 0 层没填满之前不许动笔写正文**（硬闸）；**结论的语气 ≤ 识别的强度**（最硬的一条铁律）；**绝不编造引用**。
 
@@ -23,16 +23,12 @@
 
 ```
 Ohagi-Journal-Skill/
-├── journal-framework/              ← 原创：母版 + 风格层 + 致谢
-│   ├── 英文期刊规则.md              （母版：第 0 层 SPEC + 通用硬规则 1–9 + 三道验证闸）
-│   ├── references/
-│   │   ├── 经济学写作风格.md         （共享写作风格层）
-│   │   ├── 文献宽度扩展.md           （引用图谱滚雪球，补先行研究宽度）
-│   │   ├── 稿件语气与正文纯净度.md    （三通道分离 + 段级 linter）
-│   │   └── 领域写作约定.md           （分子领域的呈现约定）
-│   └── 致谢与来源.md                （所有借鉴/采用来源的单一真相）
 ├── skills/
-│   ├── journal-drafting/           ← 原创：编排器薄壳（串流程、管交互节奏）
+│   ├── journal-drafting/           ← 原创：起草编排器（自带母版规则书，开箱即用）
+│   │   ├── SKILL.md                （编排器：串流程、管交互节奏）
+│   │   ├── 英文期刊规则.md          （母版：第 0 层 SPEC + 通用硬规则 1–9 + 三道验证闸）
+│   │   ├── references/             （展开层：写作风格 / 文献宽度 / 稿件纯净度 / 领域约定）
+│   │   └── 致谢与来源.md            （所有借鉴/采用来源的单一真相）
 │   ├── reference-checker/          ← 第三方 MIT（Liuxiangjian-ai）：投稿前参考文献穷尽核验
 │   └── journal-adapt/              ← 第三方 MIT（WantongC）：从目标刊语料萃取写作文化、生成动态写作 skill
 ├── LICENSE                         （原创部分 MIT）
@@ -45,7 +41,7 @@ Ohagi-Journal-Skill/
 
 ### 1. 安装三个 skill
 
-把 `skills/` 下三个文件夹复制到 Claude Code 的 skill 目录：
+把 `skills/` 下三个文件夹复制到 Claude Code 的 skill 目录（每个 skill 都自包含，装在哪都能跑）：
 
 ```bash
 # 在仓库根目录执行
@@ -55,13 +51,10 @@ cp -R skills/reference-checker  ~/.claude/skills/
 cp -R skills/journal-adapt      ~/.claude/skills/
 ```
 
+> `journal-drafting` 已**自带母版规则书**（`英文期刊规则.md` + `references/`），无需任何额外放置或配置。
 > `journal-adapt` 的部分功能（PDF→Markdown）依赖 MinerU；若你的语料已是 Markdown/文本则无需安装。详见 `skills/journal-adapt/docs/INSTALLATION.md`。
 
-### 2. 放置母版
-
-`journal-drafting` 启动时会用 `find ~ -path "*journal-framework/英文期刊规则.md"` 向上搜索母版，**所以把整个 `journal-framework/` 文件夹放在你用户目录（`~`）下任意位置即可**（比如直接把本仓库 clone 在那里）。
-
-### 3. 开始起草
+### 2. 开始起草
 
 在 Claude Code 里描述你的需求（触发词例：「开始起草」「写成期刊论文」「按期刊标准整理」），`journal-drafting` 会：
 
@@ -88,13 +81,13 @@ cp -R skills/journal-adapt      ~/.claude/skills/
 [Lambenthan/empiricalwiki](https://github.com/Lambenthan/empiricalwiki)、
 [juliaError/econ-TopJournal-writing-Skill](https://github.com/juliaError/econ-TopJournal-writing-Skill)（CC BY-NC，仅再造思路、未复制文字）。
 
-> 完整的来源、采用形式与许可证清单见 [`journal-framework/致谢与来源.md`](journal-framework/致谢与来源.md) —— 这是本框架的「来源单一真相」。
+> 完整的来源、采用形式与许可证清单见 [`skills/journal-drafting/致谢与来源.md`](skills/journal-drafting/致谢与来源.md) —— 这是本框架的「来源单一真相」。
 
 ---
 
 ## 许可证
 
-- 本仓库**原创部分**（`journal-framework/` 与 `skills/journal-drafting/`）以 **MIT** 发布，见根目录 [`LICENSE`](LICENSE)。
+- 本仓库**原创部分**（`skills/journal-drafting/`，含其自带的母版与风格层）以 **MIT** 发布，见根目录 [`LICENSE`](LICENSE)。
 - `skills/reference-checker/` 与 `skills/journal-adapt/` 各自遵循其原作者的 MIT 许可证。
 
 使用时请保留相应署名。欢迎提 issue / PR。

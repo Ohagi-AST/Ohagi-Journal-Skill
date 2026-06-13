@@ -23,8 +23,7 @@ SOFTWARE.
 ---
 
 注意：本 LICENSE 仅覆盖本仓库的原创部分，即：
-  - journal-framework/（母版 + 风格层 + 致谢）
-  - skills/journal-drafting/
+  - skills/journal-drafting/（起草编排器，含其自带的母版 + 风格层 + 致谢）
 
 skills/ 下的 reference-checker/ 与 journal-adapt/ 是第三方 MIT 项目，
 各自保留其作者的版权与 LICENSE（见对应子目录），不在本 LICENSE 覆盖范围内。
