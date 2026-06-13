@@ -41,7 +41,16 @@ Ohagi-Journal-Skill/
 
 ### 1. 安装三个 skill
 
+先把仓库克隆下来：
+
+```bash
+git clone https://github.com/Ohagi-AST/Ohagi-Journal-Skill.git
+cd Ohagi-Journal-Skill
+```
+
 每个 skill 都自包含、装在哪都能跑。以 **Claude Code** 为例，把 `skills/` 下三个文件夹复制到它的 skill 目录：
+
+**macOS / Linux（bash）：**
 
 ```bash
 # 在仓库根目录执行
@@ -49,6 +58,16 @@ mkdir -p ~/.claude/skills
 cp -R skills/journal-drafting   ~/.claude/skills/
 cp -R skills/reference-checker  ~/.claude/skills/
 cp -R skills/journal-adapt      ~/.claude/skills/
+```
+
+**Windows（PowerShell）：**
+
+```powershell
+# 在仓库根目录执行
+New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
+Copy-Item -Recurse -Force skills\journal-drafting   "$HOME\.claude\skills\"
+Copy-Item -Recurse -Force skills\reference-checker  "$HOME\.claude\skills\"
+Copy-Item -Recurse -Force skills\journal-adapt      "$HOME\.claude\skills\"
 ```
 
 > **其他 agent（Codex 等）**：装进各自的 skill / 自定义指令目录即可；若环境不支持 skill 文件夹，直接让 agent 读取对应文件夹下的 `SKILL.md` 并按其执行，效果相同。
