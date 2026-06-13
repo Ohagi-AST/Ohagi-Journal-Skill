@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# 编辑器 / IDE
+.vscode/
+.idea/
+
+# Claude Code 本地设置（不进公开仓库）
+.claude/
+*.swp
+*~
+
+# 临时 / 输出
+*.log
+*.tmp
+*_revised/
+converted/
+_style_cards/
