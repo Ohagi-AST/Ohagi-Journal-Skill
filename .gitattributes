@@ -1,0 +1,3 @@
+# 统一换行符：仓库与工作区一律用 LF，避免 Mac/Windows 经 OneDrive 同步产生 CRLF 噪音。
+# 本规则覆盖 core.autocrlf 设置，对所有平台生效。
+* text=auto eol=lf
