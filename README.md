@@ -27,7 +27,8 @@ Ohagi-Journal-Skill/
 │   ├── journal-drafting/           ← 原创：起草编排器（自带母版规则书，开箱即用）
 │   │   ├── SKILL.md                （编排器：串流程、管交互节奏）
 │   │   ├── 起草框架母版.md          （母版：第 0 层 SPEC + 通用硬规则 1–9 + 三道验证闸）
-│   │   ├── references/             （展开层：写作风格 / 文献宽度 / 稿件纯净度 / 领域约定）
+│   │   ├── references/             （展开层：写作风格 / 文献宽度 / 稿件纯净度 / 领域约定 / 日语优化两层）
+│   │   ├── scripts/                （zh_glyph_check.py：日语稿中文汉字残留字形检测器）
 │   │   └── 致谢与来源.md            （所有借鉴/采用来源的单一真相）
 │   ├── reference-checker/          ← 第三方 MIT（Liuxiangjian-ai）：投稿前参考文献穷尽核验
 │   └── journal-adapt/              ← 第三方 MIT（WantongC）：从目标刊语料萃取写作文化、生成动态写作 skill
@@ -83,6 +84,12 @@ Copy-Item -Recurse -Force skills\journal-adapt      "$HOME\.claude\skills\"
 3. 可选：调 `journal-adapt` 从目标刊真论文萃取写作文化、调文献宽度扩展补先行研究；
 4. 搭骨架 → 一节一停地逐节写，每节跑《单节自查》；
 5. 齐稿后跑三道终检：总闸 → `reference-checker` 引用穷尽核验 → 审稿人预演。
+
+### 3. 日语论文 / 整理日语（可选）
+
+若写作语言是日文（投日本期刊或修論），`journal-drafting` 会启用**日语优化**：净化层先清中文打底残留（中文汉字字形 → `scripts/zh_glyph_check.py` 检测；中式日语词、直译腔、标点），再按**投稿轨 / 修論轨**两套学术文体逐节校正。
+
+也可单独触发——手里已有日文稿、只想整理时，说「整理日语 / 修改日语 / 把这段日文改地道」即可走**快速入口**，跳过起草全流程直奔日语优化。两套规则见 `skills/journal-drafting/references/中文残留チェック.md` 与 `日本語学術文体.md`。
 
 ---
 

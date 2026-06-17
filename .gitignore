@@ -24,3 +24,6 @@ desktop.ini
 *_revised/
 converted/
 _style_cards/
+
+# 语料构建脚手架（仅本地：原始 PDF / 转写语料 / 蒸馏中间产物，非发布产物，~400MB+）
+corpus_build/
