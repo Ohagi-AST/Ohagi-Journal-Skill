@@ -15,6 +15,8 @@ papers_converted_checked: [N]
 paper_ids: [paper_001, paper_002, ...]
 topic_scope: ["keyword1", "keyword2", "keyword3"]
 method_scope: [theory+simulation / empirical / mixed]
+manuscript_method_family: [token from Step 1 Q6 — the family whose Method/Results block is GOVERNING]
+method_family_counts: {family_a: N, family_b: N}   # used to flag thin (⚠ N small) or absent (fallback-to-base) families
 generated_date: [DATE]
 reviewed_by: [human name or "pending"]
 pattern_policy: "Use reviewed corpus patterns, not pseudo-statistical STRONG/WEAK labels."
@@ -89,29 +91,55 @@ What framing is used?]
 
 ---
 
-## 5. Method / Model Norms
+## 5. Method / Model Norms — PER METHOD FAMILY
+
+> **Split this section by `method_family`** (Method/Results conventions are family-specific and NOT interchangeable). Mark the block matching `manuscript_method_family` as **GOVERNING**. Apply the fallback ladder: (A) family present → governing; (B) family is a corpus minority (small N) → governing but tag `⚠ N small — human review`; (C) family absent → "no in-corpus exemplar; fall back to base_rules apparatus defaults" + flag.
+
+### Family: [family_a] — [GOVERNING / supporting] (N papers)
 
 | Observed pattern | Corpus role | Supporting Papers |
 |------------------|-------------|-------------------|
 | [e.g., Intuition before formalism] | primary | |
-| [e.g., Propositions stated and proved, not lemma-heavy] | primary | |
-| [e.g., Calibration/simulation used to verify theory] | secondary | |
+| [e.g., Estimating equation displayed in body; only derivations/proofs in appendix] | primary | |
+
+- Typical `results_main_object`: [..] · `estimating_equation_placement`: [..]
+
+### Family: [family_b] — [supporting] (N papers)
+
+| Observed pattern | Corpus role | Supporting Papers |
+|------------------|-------------|-------------------|
+| [..] | | |
 
 **Notation density standard:**
 [high / moderate / light — and what that looks like in practice]
 
 **Formal exposition style:**
-[What does the method section structure typically look like?]
+[What does the method section structure typically look like, per family?]
 
 ---
 
-## 6. Results and Discussion Norms
+## 6. Results and Discussion Norms — PER METHOD FAMILY
+
+> **Split by `method_family`** (same as §5). The GOVERNING block dictates the manuscript's Results convention; do not let a minority family's distinctive presentation become the default.
+
+### Family: [family_a] — [GOVERNING / supporting] (N papers)
 
 | Observed pattern | Corpus role | Supporting Papers |
 |------------------|-------------|-------------------|
-| [e.g., Mechanism explanation is central to results narrative] | primary | |
-| [e.g., Discussion extends to policy, not just limitations] | primary | |
-| [e.g., Robustness addressed in appendix, not main text] | secondary | |
+| [e.g., Coefficient table walked column-by-column, restrictive → rich spec] | primary | |
+| [e.g., Mechanism explanation central to results narrative] | primary | |
+
+- Main results object (how the headline is led): [coefficient_table column-walk / figure-led / decomposition / proposition]
+- Estimating-equation placement norm: [displayed_in_body / ...]
+
+### Family: [family_b] — [supporting] (N papers)
+
+| Observed pattern | Corpus role | Supporting Papers |
+|------------------|-------------|-------------------|
+| [e.g., Figures lead, tables confirm (SCM/event-study)] | primary | |
+
+**Governing Results convention for `[manuscript_method_family]`:**
+[One-line statement, e.g., "lead with the coefficient table walked column-by-column; display the estimating equation in the body" — from N papers; add `⚠ N small` or `fallback-to-base` if applicable.]
 
 **Discussion function in this journal:**
 [What does discussion typically add beyond results?]
@@ -158,6 +186,14 @@ Base on: patterns common in general academic writing but absent here.]
 - [e.g., Numbered lists of 4+ contributions]
 - [e.g., Discussion that rehashes results without adding new angle]
 - [e.g., Heavy hedging on main findings]
+
+**Apparatus-integrity red flags (MANDATORY when `manuscript_method_family` ∈ {empirical, structural/calibration, mixed}).** Derive from the GOVERNING block's `estimating_equation_placement` / `results_main_object` so the flag and the dynamic-skill hard rule stay in sync:
+
+- Estimating/specification equation NOT displayed in the body (exiled to appendix or absent).
+- Main results table (coefficient / decomposition) replaced by a conceptual schematic or matrix rather than supported by it.
+- Coefficient/results table relegated to the appendix while a figure or schematic leads the body.
+
+(Pure-theory manuscripts: inapplicable; instead flag any case where the central proposition/derivation is not stated in the body.)
 
 ---
 

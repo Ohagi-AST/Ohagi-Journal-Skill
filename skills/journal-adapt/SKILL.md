@@ -76,6 +76,10 @@ Ask the user for these inputs:
 >    (11) None — rely only on corpus-derived dynamic rules
 > 6. What is your manuscript's discipline and method type?
 
+From the answer to Q6, record a structured **`manuscript_method_family`** token. Use the existing method enum `[theory / simulation / empirical / calibration / mixed]` plus one identification/method keyword where applicable (e.g., `DiD`, `IV`, `RDD`, `SCM`, `event-study`, `gravity/PPML`, `structural`). Example: `empirical/DiD-gravity`.
+
+This token is **load-bearing downstream**: it is the family whose Method/Results conventions become *governing* in Step 4 aggregation. It MUST be persisted into the Style Profile METADATA (Step 4) **and** into `dynamic_writing_skill.md` METADATA (Step 5), because Phase 2 reloads only the dynamic skill and the manuscript — a token left in conversation state alone is lost. If Q6 is ambiguous, ask one clarifying question rather than guessing the family.
+
 Load the corresponding base rules file as Priority 4 rules for this session:
 - (1) → `base_rules/general_academic.md`
 - (2) → `base_rules/economics.md`
@@ -133,8 +137,12 @@ METADATA
 - Authors: [LastName, F.; ...]
 - Year: [YEAR]
 - Corpus role: [primary_target_journal / secondary_field_optional / user_exemplar_optional]
+- Relevance tag: [topic+method / topic / method / supplement] (relative to the manuscript; drives Step 4 weighting)
 - Conversion status: [converted_checked]
 - Method type: [theory / simulation / empirical / calibration / mixed]
+- Method family: [enum + identification keyword, e.g., empirical/DiD-gravity, theory, structural/calibration] (the family this paper belongs to; Step 4 groups by this)
+- Results main object: [coefficient_table / figure / proposition_or_derivation / decomposition_or_calibration_table / conceptual_schematic / mixed] (what physically carries the headline result — ALWAYS record)
+- Estimating equation placement: [displayed_in_body / brief_in_body / appendix_only / none] (where the estimating/specification equation lives; distinct from where derivations/proofs live; `none` for pure theory)
 
 A. ABSTRACT STYLE
 - Opening move: [e.g., "Opens with a policy-relevant phenomenon, one sentence"]
@@ -168,10 +176,13 @@ E. METHOD / MODEL
 - Notation density: [heavy / moderate / light]
 - Exposition style: [theorem-proof / proposition-then-proof / walkthrough]
 - Assumption justification: [explicit / brief / implicit]
+- Equation body-vs-appendix split: [what stays in the body — e.g., the displayed estimating/specification equation — vs what is exiled to the appendix — e.g., derivations, identification proofs, heavy algebra. Record the estimating equation's placement explicitly; do NOT collapse "estimating equation" and "proof" into one.]
 
 F. RESULTS
+- Main results object: [coefficient_table / figure / proposition_or_derivation / decomposition_or_calibration_table / conceptual_schematic / mixed] (what leads — must match the METADATA field; note if a schematic/matrix only SUPPORTS vs SUBSTITUTES for the coefficient/results table)
 - Primary vehicle: [prose / tables / figures / mixed]
 - Narrative style: [result → mechanism → implication / result-only]
+- Table presentation: [e.g., coefficient table walked column-by-column from restrictive → rich spec / figure-led trajectory / decomposition table — describe how the headline numbers are physically led]
 - Mechanism emphasis: [central / mentioned / absent]
 - Robustness signaling: [main text / appendix / brief]
 
@@ -201,11 +212,24 @@ Save all Style Cards to: `[corpus_folder]/_style_cards/[paper_id]_style_card.md`
 
 Read all Paper Style Cards. Identify patterns that recur across papers.
 
+**Method-family rule (prevents the dominant failure mode).** Method/Results conventions are *method-family-specific and not interchangeable* — a reduced-form/DiD/gravity paper leads Results with a coefficient table walked column-by-column and displays its estimating equation in the body; an SCM/event-study paper leads Results with a figure; a theory paper leads with a proposition. A naive "most common / most distinctive pattern" aggregation lets a visually distinctive **minority** family hijack the profile. To prevent this:
+
+1. **Group cards by `method_family`.** Count papers per family.
+2. **Split ONLY the apparatus dimensions** — `Method / Model Norms` and `Results and Discussion Norms` — into per-family sub-blocks. **Keep all other dimensions flattened** (Editorial Identity, Introduction, Contribution, Literature, Language) — those are NOT family-specific and over-splitting makes them statistically thin.
+3. **Weight toward the manuscript's family.** Using `manuscript_method_family` (from Step 1 Q6) and each card's `relevance_tag`, designate the *governing* Method/Results convention block = the family matching the manuscript (prefer `topic+method` cards within it). State it explicitly: *"For a `[manuscript_method_family]` paper, the governing Results convention is X (from N papers)."*
+4. **Fallback ladder when corpus and manuscript families don't line up:**
+   - **A — corpus contains the manuscript's family:** that family's block is governing.
+   - **B — manuscript's family is a corpus minority (small N, e.g., ≤2):** still governing for fit, but tag it `⚠ N small — human review` so a thin convention is not mistaken for an established one.
+   - **C — corpus has zero papers of the manuscript's family:** do NOT silently adopt the nearest visually-distinctive block. Write *"no in-corpus exemplar for `[family]`; fall back to base_rules apparatus defaults"* and flag for the user.
+5. For each family block, carry the apparatus fields forward: the family's typical `results_main_object` and `estimating_equation_placement` norm.
+
 Output a Style Profile:
 
 ```
 ## Style Profile: [WRITING DESTINATION]
 Generated from [N] papers.
+manuscript_method_family: [token from Step 1 Q6 — the family whose apparatus block is governing]
+Method-family counts: [family_a: N, family_b: N, ...]
 
 ### Editorial Identity
 - Research question type: [describe]
@@ -232,15 +256,37 @@ Preferred format: [describe]
 |------------------|-------------|--------|
 ...
 
-### Method / Model Norms
+### Method / Model Norms — PER METHOD FAMILY
+> Split by `method_family`. Mark the block matching `manuscript_method_family` as **GOVERNING**.
+> Apply the fallback ladder (A/B/C) above; tag thin blocks `⚠ N small`.
+
+#### Family: [family_a]  — [GOVERNING / supporting]  (N papers)
+| Observed pattern | Corpus role | Papers |
+|------------------|-------------|--------|
+...
+- Typical `results_main_object`: [..] · `estimating_equation_placement`: [..]
+
+#### Family: [family_b] — [supporting]  (N papers)
 | Observed pattern | Corpus role | Papers |
 |------------------|-------------|--------|
 ...
 
-### Results and Discussion Norms
+### Results and Discussion Norms — PER METHOD FAMILY
+> Same split. The GOVERNING block dictates the manuscript's Results convention.
+
+#### Family: [family_a] — [GOVERNING / supporting]  (N papers)
 | Observed pattern | Corpus role | Papers |
 |------------------|-------------|--------|
 ...
+- Main results object (how the headline is led): [coefficient_table column-walk / figure-led / ...]
+- Estimating-equation placement norm: [displayed_in_body / ...]
+
+#### Family: [family_b] — [supporting]  (N papers)
+| Observed pattern | Corpus role | Papers |
+|------------------|-------------|--------|
+...
+
+**Governing Results convention for `[manuscript_method_family]`**: [one-line statement, e.g., "lead with the coefficient table walked column-by-column; display the estimating equation in the body"] (from N papers[; ⚠ N small / fallback-to-base if applicable]).
 
 ### Language Style Profile
 | Dimension | Observed norm | Corpus role |
@@ -262,6 +308,12 @@ Preferred format: [describe]
 
 ### Red Flags
 [List 5-8 writing patterns absent from the primary corpus or contradicted by strong corpus evidence]
+
+**Apparatus-integrity red flags (MANDATORY when `manuscript_method_family` ∈ {empirical, structural/calibration, mixed}).** Derive these from the governing block's `estimating_equation_placement` / `results_main_object`, so the red flag and the Step 5 hard rule cannot drift apart:
+- Estimating/specification equation NOT displayed in the body (exiled to appendix or absent).
+- The main results table (coefficient / decomposition table) replaced by a conceptual schematic or matrix instead of supported by it.
+- The coefficient/results table relegated to the appendix while a figure or schematic leads the body.
+(For pure-theory manuscripts these are inapplicable; flag instead any case where the central proposition/derivation is not stated in the body.)
 ```
 
 Save to: `[corpus_folder]/_style_cards/journal_style_card.md`
@@ -275,6 +327,8 @@ Read the Style Profile, optional secondary-corpus observations, optional user/la
 ```
 # Dynamic Writing Skill: [WRITING DESTINATION]
 Generated: [DATE]
+manuscript_method_family: [token from Step 1 Q6 — carried here so Phase 2 can apply the governing apparatus rules without re-reading the corpus]
+Governing Results convention: [one-liner from the GOVERNING family block, e.g., "coefficient table walked column-by-column; estimating equation displayed in body"]
 Primary corpus papers analyzed: [N]
 Secondary corpus papers analyzed: [N or 0]
 User/lab exemplars analyzed: [N or 0]
@@ -328,10 +382,12 @@ Do not: [journal-specific anti-patterns]
 
 ### Methods / Model
 [Entry point, notation density, exposition style, assumption justification]
+HARD RULE (from `manuscript_method_family` governing block): `estimating_equation_placement` = [displayed_in_body / ...]. Display the estimating/specification equation(s) in the body; send ONLY derivations/proofs to the appendix. Never move the estimating equation itself to the appendix.
 Do not: [journal-specific anti-patterns]
 
 ### Results
 [Narration style, mechanism emphasis, robustness framing, quantitative claim style]
+HARD RULE (from the governing block): `results_main_object` = [coefficient_table / ...]. Lead Results with this object (e.g., the coefficient table walked column-by-column). A conceptual schematic / 2×2 matrix may SUPPORT but must never SUBSTITUTE for the coefficient/results table, and that table stays in the body.
 Do not: [journal-specific anti-patterns]
 
 ### Discussion
@@ -359,10 +415,11 @@ Save to: `[manuscript_folder]/dynamic_writing_skill.md`.
 
 # HUMAN GATE — Confirm before Phase 2
 
-Display the generated `dynamic_writing_skill.md` to the user. Say:
+Display the generated `dynamic_writing_skill.md` to the user. Surface the method-family decision explicitly so the reviewer can veto it. Say:
 
 > Phase 1 complete. This is the dynamic writing skill I will apply to your manuscript.
-> Please review them. You can edit the file directly if anything is wrong.
+> Governing results convention = [X], method family = [`manuscript_method_family`], drawn from [N] corpus papers[ — ⚠ thin evidence / fallback-to-base if applicable].
+> Please review them, especially whether that family and results convention match your manuscript. You can edit the file directly if anything is wrong.
 > Reply "confirmed" when ready to proceed, or tell me what to change.
 
 Wait for explicit confirmation. Do not begin Phase 2 until the user confirms.
@@ -401,10 +458,16 @@ For each section, run all three steps in sequence before moving to the next sect
 ### Round 1 — Diagnosis
 
 Read the section. For each paragraph, identify:
-- **Problem type**: STYLE / JOURNAL-MISMATCH / AI-TASTE / LOGIC
+- **Problem type**: STYLE / JOURNAL-MISMATCH / AI-TASTE / LOGIC / APPARATUS
 - **Severity**: HIGH (blocks acceptance) / MED (weakens fit) / LOW (minor)
 - **Specific issue**: what exactly violates the journal's norms or general rules
 - **Journal match score**: 1-5 (1 = very unlike target journal, 5 = well-matched)
+
+**Apparatus presence check (MANDATORY for Methods/Model and Results sections when `manuscript_method_family` ∈ {empirical, structural/calibration, mixed}).** This is the last-line defense against the equation/table gap. Verify and flag (problem type `APPARATUS`, severity HIGH if violated):
+- the section displays its estimating/specification equation in the body (not only in an appendix);
+- Results leads with the governing `results_main_object` (e.g., the coefficient table walked column-by-column), and any conceptual schematic/matrix only supports — does not replace — that table;
+- the coefficient/results table is in the body, not relegated to the appendix.
+Note: an `APPARATUS` flag reports a *missing structural element*. Per the HARD RULES, Round 2 must not fabricate equations, tables, or numbers to fill it — flag it for the author and, if present elsewhere (e.g., an appendix), recommend relocating into the body.
 
 Output the diagnosis as a structured report before writing any revisions.
 
@@ -428,7 +491,7 @@ For each paragraph that was changed, write a log entry:
 ---
 Paragraph: [N]
 Severity: [HIGH / MED / LOW]
-Problem types: [STYLE / JOURNAL-MISMATCH / AI-TASTE / LOGIC]
+Problem types: [STYLE / JOURNAL-MISMATCH / AI-TASTE / LOGIC / APPARATUS]
 Issues: [specific description of what was wrong]
 Rules applied:
   - [rule name] — Source: [target-journal / secondary-corpus / user-exemplar / static-base / cleanup]

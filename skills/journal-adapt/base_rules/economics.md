@@ -48,7 +48,8 @@ Do not:
 
 - Intuition before formalism. Describe the economic environment in plain English before math.
 - Every assumption must earn its place: state which are essential vs. simplifying.
-- Proofs belong in appendix unless they illuminate the mechanism.
+- **An estimating/specification equation is NOT a proof.** Display the main estimating equation(s) in the body (Methods or Results). Only *derivations and proofs* go to the appendix. "Proofs belong in appendix" never licenses moving the estimating equation itself out of the body.
+- Proofs and long derivations belong in appendix unless they illuminate the mechanism.
 - State each proposition in plain English, then formally.
 - Only number equations you reference later.
 
@@ -60,6 +61,7 @@ Do not:
 - Quantify: "large" and "small" are meaningless without context.
 - Effect sizes matter as much as statistical significance.
 - Robustness checks after main result, not before.
+- **Lead with the main results object, do not replace it.** For an empirical paper that object is the coefficient table (walked column-by-column); for structural/calibration it is the decomposition/calibrated-moment table; for theory it is the stated proposition/derivation. A conceptual schematic or 2×2 matrix can *support* but must never *substitute for* the coefficient/results table, and that table belongs in the body, not the appendix.
 
 ---
 

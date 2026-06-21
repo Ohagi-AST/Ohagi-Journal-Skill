@@ -78,6 +78,8 @@ If the user does not know which static base skill to choose, point them to `docs
 | `method` | Similar method, different topic. |
 | `supplement` | Useful but lower weight. |
 
+Also record `manuscript_method_family` (from Step 1 Q6): the manuscript's own method family (method enum + identification keyword, e.g., `empirical/DiD-gravity`). It is distinct from `relevance_tag` (which scores corpus papers *relative to* the manuscript). The family token drives Module C's per-family weighting and is carried through the profile and the dynamic skill into Phase 2.
+
 ---
 
 ## Module B — Paper Style Card Extraction
@@ -113,13 +115,21 @@ Not allowed:
 
 ### Pattern review
 
+### Method-family weighting (prevents minority-pattern hijack)
+
+Method/Results conventions are method-family-specific and not interchangeable (a reduced-form/DiD paper leads Results with a coefficient table and a body-displayed estimating equation; an SCM paper leads with a figure; a theory paper with a proposition). A naive "most distinctive pattern" aggregation lets a visually distinctive minority family dominate. Therefore:
+
+- group cards by `method_family`; split ONLY the Method and Results apparatus dimensions per family (keep Introduction / Contribution / Literature / Language flattened across all families);
+- weight toward the manuscript's family using `manuscript_method_family` and each card's `relevance_tag`; mark that family's block GOVERNING;
+- fallback ladder when families don't line up: (A) family present → governing; (B) family is a corpus minority (small N) → governing but tagged `⚠ N small — human review`; (C) family absent → fall back to base_rules apparatus defaults and flag, never silently adopt the nearest distinctive block.
+
 ### Output
 
-- target-journal profile;
+- target-journal profile (with per-family Method/Results blocks and a stated governing convention);
 - optional secondary-corpus profile;
 - optional user/lab exemplar profile;
 - conflict table;
-- red flags;
+- red flags (including mandatory apparatus-integrity flags for empirical/structural/mixed manuscripts);
 - language register summary.
 
 The profile should emphasize reviewed writing patterns rather than pseudo-statistical STRONG/WEAK labels. Users who want more confidence should add more high-quality corpus papers and review the patterns manually.
@@ -195,3 +205,5 @@ The user reviews the dynamic skill before manuscript revision begins.
 | introduction | 3 | State contribution through the decision object rather than a generic literature claim. | dynamic-general |
 
 The user decides whether candidates should become part of a future static base skill.
+
+Apparatus rules (estimating-equation placement, results-main-object) are **method-family-specific — mark them non-reusable** in this table, so a family-shaped rule (e.g., an SCM figure-led convention) is not promoted into a general static skill where it would misfire on other families.

@@ -31,8 +31,11 @@ corpus_role: [primary_target_journal / secondary_field_optional / user_exemplar_
 authors: ["LastName, F.", "LastName, F."]
 year: [YEAR]
 title: "[TITLE]"
-relevance_tag: [topic+method / topic / method / supplement]
+relevance_tag: [topic+method / topic / method / supplement]   # relative to the manuscript; drives Step 4 weighting
 method_type: [theory / simulation / empirical / calibration / mixed]
+method_family: [enum + identification keyword, e.g., empirical/DiD-gravity, theory, structural/calibration]   # Step 4 groups apparatus dimensions by this
+results_main_object: [coefficient_table / figure / proposition_or_derivation / decomposition_or_calibration_table / conceptual_schematic / mixed]   # what physically carries the headline result — ALWAYS record
+estimating_equation_placement: [displayed_in_body / brief_in_body / appendix_only / none]   # where the estimating/specification equation lives; distinct from where derivations/proofs live; none for pure theory
 extraction_date: [DATE]
 extractor: [claude-sonnet / human]
 extraction_scope: [full_text]
@@ -95,14 +98,17 @@ conversion_notes: [brief note, e.g., "full text readable; equations preserved"]
 - **Formal exposition style:** [theorem-proof / proposition-then-proof / definition-buildup / walkthrough]
 - **Verification type:** [proposition / lemma / simulation / calibration / robustness check]
 - **Explanation of assumptions:** [explicit and justified / stated but brief / implicit]
+- **Equation body-vs-appendix split:** [what stays in the body — e.g., the displayed estimating/specification equation — vs what goes to the appendix — derivations, identification proofs, heavy algebra. Do NOT collapse "estimating equation" and "proof" into one bucket.]
 - **Link to empirics (if any):** [tight / loose / absent]
 
 ---
 
 ## F. Results Presentation
 
+- **Main results object:** [coefficient_table / figure / proposition_or_derivation / decomposition_or_calibration_table / conceptual_schematic / mixed] — what leads the results; must match the METADATA field. Note whether any schematic/matrix only **supports** vs **substitutes for** the coefficient/results table.
 - **Primary vehicle:** [prose / tables / figures / mixed]
 - **Narrative style:** [result → mechanism → implication / result-only / mechanism-first]
+- **Table presentation:** [how the headline numbers are physically led — e.g., coefficient table walked column-by-column from restrictive → rich spec / figure-led trajectory / decomposition table]
 - **Mechanism emphasis:** [explicit and central / mentioned / absent]
 - **Robustness signaling:** [where in the paper / how extensive / how framed]
 - **Quantitative claim style:** [precise / order-of-magnitude / qualitative-only]
