@@ -100,7 +100,7 @@ Copy-Item -Recurse -Force skills\journal-adapt      "$HOME\.claude\skills\"
 | 组件 | 来源 | 许可证 |
 |---|---|---|
 | `skills/reference-checker/` | [Liuxiangjian-ai/reference-checker-skill](https://github.com/Liuxiangjian-ai/reference-checker-skill) | MIT（见该子目录 `LICENSE`） |
-| `skills/journal-adapt/` | [WantongC/journal-adapt-writing-skill](https://github.com/WantongC/journal-adapt-writing-skill) | MIT（见该子目录 `LICENSE`） |
+| `skills/journal-adapt/` | [WantongC/journal-adapt-writing-skill](https://github.com/WantongC/journal-adapt-writing-skill) | MIT（见该子目录 `LICENSE`）·**本仓库已在其基础上修改**（方法族感知聚合 + 计量装置信号；改动详见该子目录 `LICENSE` 的 MODIFICATIONS 段） |
 
 母版在搭建中还借鉴了若干开源仓库的**方法论、结构与清单**（未复制其内容）：
 [affaan-m/ecc](https://github.com/affaan-m/ecc)、

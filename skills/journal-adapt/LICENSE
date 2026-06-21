@@ -11,6 +11,14 @@ authoritative source for the license text and copyright year. This file is
 included to satisfy the MIT requirement that the copyright notice and
 permission notice accompany any redistribution.
 
+MODIFICATIONS
+This copy has been modified from the upstream project by Ohagi-AST. Notable
+changes: method-family-aware style-card aggregation, first-class
+econometric-apparatus signals (estimating-equation placement / main-results
+object), and a Phase-2 apparatus-integrity check. These modifications are not
+endorsed by the upstream author and may diverge from the upstream project.
+The MIT License above continues to govern this modified copy.
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
