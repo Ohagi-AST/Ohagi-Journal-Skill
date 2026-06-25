@@ -2,7 +2,7 @@
 
 > 这是「图表先行 + 视觉闭环」阶段一的侦察记录：用 `pdf_to_png.py` 把加密 EER 论文渲染成 PNG、
 > 用 Read 工具**亲眼看**，归纳目标刊（EER）的图表**可见 house-style**。供阶段二落成
-> `references/图表设计与叙事.md` 标准文档 + Stata 渲染工具的选项 + 图标准时**对齐实证**，
+> `references/en-exhibit-design-narrative.md` 标准文档 + Stata 渲染工具的选项 + 图标准时**对齐实证**，
 > 而非凭先验拍脑袋（九宫格冒充三线表那种错误就是凭先验来的）。
 >
 > 状态：**EER 全 10 篇已完成**——结构全量文本抽取（见 [`RECON_图表叙事结构.md`](RECON_图表叙事结构.md)）+ 视觉复核**覆盖全 10 篇、每种 exhibit 类型均亲眼看过**；顶刊（AER/QJE/ReStud）待用户提供 PDF 后补。
@@ -64,7 +64,7 @@
 
 ## 4. 与现有 skill 的差异点（留给阶段二处理，本阶段不改）
 
-1. **`Fig.` vs `Figure`**：现 `经济学写作风格.md §图表` 例子用 `Figure 1.`；EER 实证用 **`Fig. 1.`**。阶段二在标准文档里注明"题注缩写跟目标刊"，并把 EER 档设为 `Fig.`。
+1. **`Fig.` vs `Figure`**：现 `en-economics-writing-style.md §图表` 例子用 `Figure 1.`；EER 实证用 **`Fig. 1.`**。阶段二在标准文档里注明"题注缩写跟目标刊"，并把 EER 档设为 `Fig.`。
 2. **显著性三级 0.10/0.05/0.01**：与 esttab 默认一致，锁死即可。
 3. **题注位置**：表上、图下——写进标准文档 checklist。
 4. 现有句级纪律（每句绑定单元格、表注报样本/FE/聚类/SE）与 EER 实证**完全吻合**，无需改，只需在全文级补"套件统一 + 放置计划 + 视觉自检"。
@@ -73,4 +73,4 @@
 
 - **顶刊视觉语料**：需用户提供 AER/QJE/ReStud 等代表论文 PDF；到位后用 `pdf_to_png.py` 同法扫，补"最高标准/显眼·叙事设计"参照，并比对 EER 是否需上调。
 - **描述统计表**实样未单独取到（results 表为主）；阶段二遇到时确认 `变量 | N | mean | sd | min | max` 三线式即可，规格已可先定。
-- 阶段二据本报告：① 写 `references/图表设计与叙事.md`（house-style spec + 图表蓝图模板 + 反模式 + 视觉自检硬闸 + 渲染≠造数）；② 把上面 esttab/图标准落成 `scripts/exhibit_*`；③ 接进工作流（`[2.5]` 阶段、write-to-exhibit、《单节自查》视觉项）。
+- 阶段二据本报告：① 写 `references/en-exhibit-design-narrative.md`（house-style spec + 图表蓝图模板 + 反模式 + 视觉自检硬闸 + 渲染≠造数）；② 把上面 esttab/图标准落成 `scripts/exhibit_*`；③ 接进工作流（`[2.5]` 阶段、write-to-exhibit、《单节自查》视觉项）。

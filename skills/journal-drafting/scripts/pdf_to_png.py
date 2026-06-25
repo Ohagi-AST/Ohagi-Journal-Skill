@@ -69,7 +69,14 @@ def render_one(pdf_path, pages_spec, dpi, out_root):
     # owner-password 权限锁：needs_pass 通常为 False（可直接渲染）；若 True 先试空口令。
     if doc.needs_pass:
         if not doc.authenticate(""):
-            print(f"[!] {stem}: 需要开档口令（user password），跳过。请提供未加密版。")
+            # 真正的 user-password（开档口令）加密：空口令进不去，PyMuPDF 也无能为力。
+            # 区别于 owner-password（仅限制复制/打印，空口令即可放行）——后者不会走到这里。
+            print(f"[!] {stem}: 这是 user-password（开档口令）加密的 PDF，空口令无法打开，已跳过。")
+            print( "    这不是 owner-password 权限锁（那种本工具能自动去锁），而是真正的开档加密。")
+            print( "    出路（任选其一）：")
+            print(f"      1) 拿到口令后手动解密：qpdf --password=<PW> --decrypt \"{pdf_path}\" out.pdf，再对 out.pdf 跑本工具；")
+            print( "      2) 从期刊官网/机构库下载未加密的正式版（投稿/出版版通常不加开档口令）；")
+            print( "      3) 若你有合法访问权，用阅读器另存/打印成无密码 PDF 后再处理。")
             doc.close()
             return 0
 

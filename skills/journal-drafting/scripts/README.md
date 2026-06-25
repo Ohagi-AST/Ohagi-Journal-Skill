@@ -4,16 +4,19 @@
 > 把真实回归渲染成**三线表 + 灰度图**，杜绝"九宫格冒充三线表""图表不统一"。
 > house-style 实证依据见 [`RECON_图表发现.md`](RECON_图表发现.md)（扫 EER 真实表/图归纳）。
 >
-> ⚠️ 这些是**工具**，阶段一**未接线**进写作工作流；接进 `[2.5] 图表蓝图` 等留作阶段二。
+> ✅ 已接线进 `[2.5] 图表蓝图`：编排器按环境三选一渲染（Stata `.do` / Python `exhibit_render.py` / 退化 Markdown 模板），见 `../SKILL.md` 图表蓝图第 5 步。
 
 ## 文件
 | 文件 | 作用 |
 |---|---|
 | `pdf_to_png.py` | PDF（含加密）→ PNG。去 owner-password + 高清栅格化，供视觉读图。 |
+| `exhibit_render.py` | **Python 等价渲染器**（仅 `pandas`+`matplotlib`，不依赖 Stata/LaTeX）：`render_table` 三线表片段 / `render_coefplot` / `render_event_study`。house-style 与下面两个 `.do` 对齐。`--demo` 看产物。 |
 | `exhibit_style.do` | 三线表渲染封装 `exhibit_table`（锁定 esttab house-style：booktabs/星号/SE/列号/跨列头）。 |
 | `exhibit_figs.do` | 图标准：黑白 `s1mono` 主题 + `graph_export_exhibit`（固定尺寸导出）+ `exhibit_coefplot`（系数图）。 |
+| `exhibit_map.py` | 跨论文抽「图表叙事结构」：图表清单 / 章节位置 / 正文交叉引用句 / 主-附切分。 |
 | `exhibit_preamble.tex` | 最小 LaTeX 前导（booktabs+threeparttable+caption）与"图表盒子"用法示例。 |
 | `exhibit_build_template.do` | 规范流程范例（真实回归→表+图），照抄改路径。 |
+| `zh_glyph_check.py` | 日语稿「中文汉字残留」字形检测器（净化层·第1关）。 |
 | `_smoke_test.do` | 冒烟测试（`sysuse auto`），产出 `_smoke_out/`。 |
 | `RECON_图表发现.md` | EER 图表视觉 house-style 侦察报告。 |
 

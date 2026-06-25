@@ -1,0 +1,5 @@
+# reference-checker — vendored third-party skill
+upstream: https://github.com/Liuxiangjian-ai/reference-checker-skill
+license: MIT (see ./LICENSE)
+synced_commit: unknown   # 初次 vendor 时手动复制，未记录上游 commit；下次同步请填入上游 HEAD hash
+modifications: none       # 原样附带，未改动

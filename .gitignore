@@ -27,9 +27,15 @@ _style_cards/
 
 # 图表工具的渲染 / 中间产物（scripts/ 脚本生成，非发布物）
 _exhibit_images/
+_exhibit_py_out/
 _smoke_out/
 _testdrive/
 exhibit_map.json
+
+# Python 缓存 / 测试中间物
+__pycache__/
+*.pyc
+.pytest_cache/
 *.aux
 *.fdb_latexmk
 *.fls

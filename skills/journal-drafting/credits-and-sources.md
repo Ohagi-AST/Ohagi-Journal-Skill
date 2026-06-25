@@ -20,7 +20,7 @@
 - **仓库**：https://github.com/lishn6/awesome-ai-econ-research-writing
 - **是什么**：面向经济学论文的一组写作 skill（economics-writing-style、identification-auditor、literature-positioning、referee-simulator、regression-table-writer、good-question、empirical_workflow 等）。
 - **我们学到/用了什么**：把抽象规则**落成可操作清单**。具体吸收进母版——
-  - `references/经济学写作风格.md` ← economics-writing-style（信息密度、禁套话、用词 avoid→prefer 表、因果谨慎句库、数字/图表注释）
+  - `references/en-economics-writing-style.md` ← economics-writing-style（信息密度、禁套话、用词 avoid→prefer 表、因果谨慎句库、数字/图表注释）
   - 规则 1 各节配方、"固定效应≠识别" ← empirical_workflow
   - 规则 2 文献地图表 ← literature-positioning
   - 规则 4 识别审计清单 + 设计专用补检 + 因果措辞替换库 ← identification-auditor
@@ -51,7 +51,7 @@
 
 - **仓库**：https://github.com/Lambenthan/empiricalwiki ；上游 https://github.com/skyllwt/OmegaWiki ；理念源 Karpathy LLM-Wiki gist。
 - **是什么**：以 wiki/知识图谱为核心的经管实证研究操作系统（把论文拆成 variables/identification/… 等实体、跨论文累积、29 个 skill 覆盖全流程）。整套基建偏重单篇、已收尾型的实证项目，故**未采用整套**。
-- **我们学到/用了什么**：仅借鉴其 `/discover` skill 的**引用图谱滚雪球方法**——从锚点论文向后/向前/共被引/横向扩展文献宽度。落成 `references/文献宽度扩展.md`，并接入薄壳「第 2.5 步 文献宽度扩展」与母版规则 2。用 Semantic Scholar Graph API 实现，不装其基建。
+- **我们学到/用了什么**：仅借鉴其 `/discover` skill 的**引用图谱滚雪球方法**——从锚点论文向后/向前/共被引/横向扩展文献宽度。落成 `references/en-literature-breadth.md`，并接入薄壳「第 2.5 步 文献宽度扩展」与母版规则 2。用 Semantic Scholar Graph API 实现，不装其基建。
 - **采用形式**：方法借鉴，未安装。
 - **许可证**：MIT（empiricalwiki / ΩmegaWiki）。
 - **配套数据源**：Semantic Scholar Graph API（免费，引用图谱）。
@@ -62,15 +62,15 @@
 - **是什么**：经济学顶刊写作 5-skill 系统（英文写作 / 中文顶刊 / 表图设计 / 多代理 / 路由），`econ-write` 基于 hanlulong/econ-writing-skill（MIT），蒸馏自 50+ 篇顶刊写作指南。
 - **⚠️ 许可证**：原创内容 **CC BY-NC 4.0（非商用）**，作者声明不以 OSI 开源形式发布 → **不可复制/转载进发布仓库**，只能**理解后用自己的话再造 + 署名引用**。
 - **我们学到/用了什么（均为再造，未复制文字）**：
-  - `references/稿件语气与正文纯净度.md`（三通道分离 + 段级 linter + 指针/硬拒）← 其 manuscript-voice 思路
+  - `references/en-manuscript-voice-purity.md`（三通道分离 + 段级 linter + 指针/硬拒）← 其 manuscript-voice 思路
   - 母版规则 6「系数→经济量级」← 其 economic-magnitude 思路
-  - `references/领域写作约定.md`（含贸易/引力等子领域）← 其 field-specific conventions 思路
-- **后续采用（阶段二，更新此条）**：原"刻意未采用"的**表图视觉设计**思路，现已按 CC BY-NC 规矩**自行再造、不复制文字、署名引用**，落成 `references/图表设计与叙事.md`（图表先行 / 图表蓝图 / 全文 house-style / 视觉自检 / 主附放置）；其 house-style 与叙事弧基线另由 **EER 实证侦察**归纳（见第 8 节）。**多代理控制器**仍未采用（现阶段过重）。
+  - `references/en-field-conventions.md`（含贸易/引力等子领域）← 其 field-specific conventions 思路
+- **后续采用（阶段二，更新此条）**：原"刻意未采用"的**表图视觉设计**思路，现已按 CC BY-NC 规矩**自行再造、不复制文字、署名引用**，落成 `references/en-exhibit-design-narrative.md`（图表先行 / 图表蓝图 / 全文 house-style / 视觉自检 / 主附放置）；其 house-style 与叙事弧基线另由 **EER 实证侦察**归纳（见第 8 节）。**多代理控制器**仍未采用（现阶段过重）。
 - **采用形式**：思路借鉴 + 自行再造，未安装、未复制。
 
 ## 7. 日语优化层的语料来源（日本語学術コーパス）
 
-- **是什么**：`references/中文残留チェック.md`（净化层）与 `references/日本語学術文体.md`（投稿轨/修論轨文体层）的文体规则，蒸馏自一批公开的日本经济学学术文本。
+- **是什么**：`references/ja/ja-zh-残留字形チェック.md`（净化层）与 `references/ja/ja-学術文体.md`（投稿轨/修論轨文体层）的文体规则，蒸馏自一批公开的日本经济学学术文本。
 - **语料来源**（均为公开获取，仅用于**蒸馏文体规律**，不复制原文进发布物）：
   - **J-STAGE** 开放获取经济学/社会科学期刊论文（投稿轨主体，按刊过滤书评/学会公告后取样）。
   - **一橋大学『経済研究』** OAI-PMH 开放仓库（投稿轨补充）。

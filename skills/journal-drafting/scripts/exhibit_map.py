@@ -49,9 +49,25 @@ def norm(lbl, num):
     return f"{lbl} {num}"
 
 
+# 学术文本里带句点、但不该触发断句的缩写（句点是缩写的一部分，不是句末）。
+# 关键：放过 "Fig." / "Figs." / "Eq." 等——否则 "see Fig. 3." 会在 "Fig." 后误断，
+# 把交叉引用 "Fig. 3" 劈成两句，XREF_RE 再也匹配不到（这是本函数原来的 bug）。
+_ABBREV = (
+    "e.g.", "i.e.", "cf.", "vs.", "etc.", "et al.", "al.",
+    "Fig.", "Figs.", "Eq.", "Eqs.", "No.", "Nos.", "pp.", "p.",
+    "Sec.", "Tab.", "Col.", "Cols.", "Ch.", "Ref.", "Refs.", "approx.",
+)
+_DOT = "\x00"  # 占位符：临时顶替缩写里的句点，断句后再还原
+
+
 def split_sentences(text):
     # 粗切句：按句末标点 + 空白。够用于挑含 xref 的句子。
-    return re.split(r'(?<=[.!?])\s+', text.replace("\n", " "))
+    # 先把学术缩写里的句点藏成占位符，避免在 e.g./Fig./Table 等后面误断句。
+    t = text.replace("\n", " ")
+    for ab in _ABBREV:
+        t = t.replace(ab, ab.replace(".", _DOT))
+    parts = re.split(r'(?<=[.!?])\s+', t)
+    return [p.replace(_DOT, ".") for p in parts]
 
 
 def analyze(pdf_path, maxxref):

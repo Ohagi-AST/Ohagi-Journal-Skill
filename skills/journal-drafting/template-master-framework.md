@@ -51,7 +51,7 @@
 | 文献宽度扩展 | 视情况 | 可选（先行研究宽度不足时才用，不强求穷尽） |
 | 新规性（规则 3） | 1–3 条、扛点名最近邻、禁裸 first-to | **软化**：清晰研究问题 + 适度贡献即可 |
 | 系数→经济量级（规则 6） | 建议 | 可选 |
-| **图表蓝图（规则 6 扩展）** | 跟目标刊全配置（house-style/叙事弧/头牌） | **核心照走**（蓝图·三线表·视觉自检·不造数·write-to-exhibit）；house-style 与引出语跟**学校規程·目标语言**、渲染工具可选。详见 `references/图表设计与叙事.md`「适用档位」 |
+| **图表蓝图（规则 6 扩展）** | 跟目标刊全配置（house-style/叙事弧/头牌） | **核心照走**（蓝图·三线表·视觉自检·不造数·write-to-exhibit）；house-style 与引出语跟**学校規程·目标语言**、渲染工具可选。详见 `references/en-exhibit-design-narrative.md`「适用档位」 |
 | 引用穷尽核验（reference-checker） | 投稿前穷尽 + 分级 | **轻量**：不编造 + 标【待核】+ 抽查关键引用 |
 | 审稿人预演（规则 8） | 顶刊 referee 视角 | **降级**为答辩委员视角，或跳过 |
 | 期刊专属：匿名化 / 投稿体例 / 字数硬限 / 复现包 | 适用 | ⏭️ 跳过，改用学校规程 |
@@ -76,9 +76,9 @@
 - **Data 节**：来源与制度背景 / 样本期与观测单位 / 样本筛选与最终样本量 / 被解释·处理·控制·固定效应 / 变量单位与变换 / 对解读重要的描述统计。
 - **識別戦略 节**：估计方程 / 识别变异 / 对照逻辑 / 固定效应与控制 / 标准误聚类层级 / 关键识别假设 / 威胁与对应检验。
   ⛔ **不要把固定效应本身当识别——必须说明固定效应之后还剩什么变异在干活**（重力面板尤其要命）。
-- **Results 节顺序**：方向与量级 → 统计显著性 → 经济显著性 → 跨设定稳健性 → 与假设的关系 → 必要 caveat。⛔ 没有 baseline mean / 标准差就别编经济显著性。呈现顺序应与**图表蓝图的叙事弧**一致（规则 6 / `references/图表设计与叙事.md`）。
+- **Results 节顺序**：方向与量级 → 统计显著性 → 经济显著性 → 跨设定稳健性 → 与假设的关系 → 必要 caveat。⛔ 没有 baseline mean / 标准差就别编经济显著性。呈现顺序应与**图表蓝图的叙事弧**一致（规则 6 / `references/en-exhibit-design-narrative.md`）。
 - **Robustness / Heterogeneity / Mechanism**：稳健性必须回应某个**具体威胁**；异质性必须有**经济理由**；机制只能写"渠道证据"，不是完整因果链的证明。
-- **分领域约定**：不同子领域呈现习惯不同（宏观/金融/贸易引力/理论…）→ 按需读 `references/领域写作约定.md`，别把通用骨架硬套。
+- **分领域约定**：不同子领域呈现习惯不同（宏观/金融/贸易引力/理论…）→ 按需读 `references/en-field-conventions.md`，别把通用骨架硬套。
 
 ## 2. 文献综述（Literature Review = 定位，不是罗列）
 
@@ -86,9 +86,9 @@
 - **每一簇文献必须收束到一句"缺了什么 → 那就是我的 gap"。** 没有这句收束的段落删掉。
 - 必引领域内**绕不开的前作**（最接近你的那几篇）。漏引最近的近邻 = referee 一票否决高发区。
 - 综述里出现的每一篇，都要能回答："它和本文什么关系？支持/对照/被超越？"
-- **产出一张「文献地图」表**：簇 | 关键引用 | 该簇已确立的发现 | 本文相对它的贡献。先有表、再写散文。（同一"先有表、再写散文"原则，经规则 6 推广到全文结果图表——见 `references/图表设计与叙事.md`。）
+- **产出一张「文献地图」表**：簇 | 关键引用 | 该簇已确立的发现 | 本文相对它的贡献。先有表、再写散文。（同一"先有表、再写散文"原则，经规则 6 推广到全文结果图表——见 `references/en-exhibit-design-narrative.md`。）
 - 句式：✅"This paper contributes to three strands of literature." / "Relative to this work, we…" / "The closest papers are …, which…"；❌"fills an important gap"（不说哪个 gap）/ ❌空洞开头"It is important to note that…"。
-- **宽度不足时**（锚点够、但综述宽度不够）→ 用 `references/文献宽度扩展.md` 从锚点做引用图谱滚雪球（Semantic Scholar API），扩出按簇排序的候选，再写文献地图。
+- **宽度不足时**（锚点够、但综述宽度不够）→ 用 `references/en-literature-breadth.md` 从锚点做引用图谱滚雪球（Semantic Scholar API），扩出按簇排序的候选，再写文献地图。
 
 ## 3. 新规性 / 贡献（Novelty & Contribution）
 
@@ -122,7 +122,7 @@
 - IV：相关性、排他性、单调性、第一阶段、LATE 解读。
 - RDD：连续性、操纵、带宽、协变量平衡、局部解读。
 
-**因果措辞替换库**：设计不支持因果时 ⛔ 禁 `proves / demonstrates / X causes Y / 导致 / もたらす`，改用 → `The evidence is consistent with / The estimates suggest / The results support the interpretation that / This pattern points to / …と整合的`（完整句库见 `references/经济学写作风格.md`）。
+**因果措辞替换库**：设计不支持因果时 ⛔ 禁 `proves / demonstrates / X causes Y / 导致 / もたらす`，改用 → `The evidence is consistent with / The estimates suggest / The results support the interpretation that / This pattern points to / …と整合的`（完整句库见 `references/en-economics-writing-style.md`）。
 
 ## 5. 引用诚信（Citation Integrity）
 
@@ -141,7 +141,7 @@
 - **图表自含**：脱离正文也能看懂（标题、单位、样本、注释齐全）。
 - 复现心态：变量定义、样本筛选、口径处理在文中或附录交代清楚，别让别人猜。
 
-**图表先行 / 图表蓝图（全文级 → 见 `references/图表设计与叙事.md`）**：
+**图表先行 / 图表蓝图（全文级 → 见 `references/en-exhibit-design-narrative.md`）**：
 - **先设计整套图表、再写散文**——段落服务图表、图表服务叙事；动笔正文前先填「图表蓝图」（exhibit 清单 + 叙事弧 + 锚定节 + 主/附放置），经用户确认再逐节写。反"文字提到就地塞张表"。
 - **头牌按方法族**：缩减式/gravity→基准系数表（走列）；SCM/事件研究→主图；理论→核心命题。接 journal-adapt 则以目标刊治理族领头方式为准。
 - **全文一套 house-style**：⛔ 表一律**三线表**（booktabs；**禁竖线/全框线/九宫格**）；星号/SE/小数/表注/题注位置全文一致；图灰度极简、题注在图下。渲染用 `scripts/`（esttab→booktabs / coefplot）。
@@ -167,9 +167,9 @@
 - 期刊英文语域：**简洁、主动语态优先、发现用现在时**（"We find that…"），避免口语和冗词。
 - **hedging 纪律**：该 hedge 的（主张强度问题）一定 hedge，不该 hedge 的别滥用模糊词稀释结论。
 - ⛔ **内部暗语 → 学术表述**：任何只在你备忘录/内部讨论里出现、没在正式计量文献里用过的词，**禁止进正文**。需要时为本篇建一张"内部词 → 英文学术表述"对照表（沿用你已有的用词规范习惯）。
-- **共享写作风格层 → 见 `references/经济学写作风格.md`**：信息密度、禁套话、实质性过渡、段首定角色、用词 avoid→prefer 表、因果谨慎句库、数字/单位/图表注释。写任何一节正文前都套这一份。
-- **稿件语气与正文纯净度 → 见 `references/稿件语气与正文纯净度.md`**：三通道分离（正文 / 作者备忘 / 任务日志，只有正文进稿子）+ 内部标签替换 + 段级 linter + 指针规则 + 硬拒模式。它是本条"内部暗语→学术表述"的系统化、可执行版，逐段跑（并入规则 8《单节自查》）。
-- **日语轨专用（写作语言=日文才加载）**：① 净化层 `references/中文残留チェック.md`（中文打底残留三关：字形脚本 / 词汇同形异义 / 直译腔与标点）；② 文体层 `references/日本語学術文体.md`（投稿轨 + 修論轨两套日语学术文体）。由编排器 SKILL 第 3.5 步「日语优化步骤」驱动；非日语轨不加载。
+- **共享写作风格层 → 见 `references/en-economics-writing-style.md`**：信息密度、禁套话、实质性过渡、段首定角色、用词 avoid→prefer 表、因果谨慎句库、数字/单位/图表注释。写任何一节正文前都套这一份。
+- **稿件语气与正文纯净度 → 见 `references/en-manuscript-voice-purity.md`**：三通道分离（正文 / 作者备忘 / 任务日志，只有正文进稿子）+ 内部标签替换 + 段级 linter + 指针规则 + 硬拒模式。它是本条"内部暗语→学术表述"的系统化、可执行版，逐段跑（并入规则 8《单节自查》）。
+- **日语轨专用（写作语言=日文才加载）**：① 净化层 `references/ja/ja-zh-残留字形チェック.md`（中文打底残留三关：字形脚本 / 词汇同形异义 / 直译腔与标点）；② 文体层 `references/ja/ja-学術文体.md`（投稿轨 + 修論轨两套日语学术文体）。由编排器 SKILL 第 3.5 步「日语优化步骤」驱动；非日语轨不加载。
 
 ## 8. 验证闸 / Checkpoint（Verification Loop，别 hope-driven）
 
@@ -181,7 +181,7 @@
 - [ ] 本节出现的引用，全部真实可查 / 已标【待核】？（规则 5）
 - [ ] 字数 / 格式符合第 0 层 spec？
 - [ ] 有没有内部暗语漏进去？（规则 7）
-- [ ] 本节若产出/更新了图表：过了**视觉自检**吗（渲染成图→亲眼看：三线表/无九宫格/对齐/表注/与图表蓝图一致；规则 6 + `references/图表设计与叙事.md`）？
+- [ ] 本节若产出/更新了图表：过了**视觉自检**吗（渲染成图→亲眼看：三线表/无九宫格/对齐/表注/与图表蓝图一致；规则 6 + `references/en-exhibit-design-narrative.md`）？
 
 **投稿前过这张《总闸》：**
 - [ ] 一句话研究问题 vs 全文——还是同一个问题吗？（防漂移）
@@ -223,4 +223,4 @@
 
 ---
 
-*本框架借鉴/采用的开源仓库见同目录 [`致谢与来源.md`](致谢与来源.md)。*
+*本框架借鉴/采用的开源仓库见同目录 [`credits-and-sources.md`](credits-and-sources.md)。*
