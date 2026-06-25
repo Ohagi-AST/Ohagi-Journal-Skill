@@ -1,5 +1,17 @@
 # reference-checker — vendored third-party skill
 upstream: https://github.com/Liuxiangjian-ai/reference-checker-skill
 license: MIT (see ./LICENSE)
-synced_commit: unknown   # 初次 vendor 时手动复制，未记录上游 commit；下次同步请填入上游 HEAD hash
-modifications: none       # 原样附带，未改动
+synced_commit: f30bd18b79f38bb24e57cad6ea0132323e329c94   # main HEAD（内容比对确定，见下）
+synced_branch: main
+
+# modifications（本仓库对原样副本的少量本地改动）：
+#   - README.md / README.en.md：移除指向缺失 assets/cover.png 的封面图块；
+#     补 Claude Code 安装片段；修正 EN 语言切换链接（原指向自身）。
+#   - 其余文件与上游 f30bd18 逐字一致（CRLF 归一化后）。
+#
+# 如何复核 / 更新 synced_commit：
+#   git clone https://github.com/Liuxiangjian-ai/reference-checker-skill /tmp/u
+#   for c in $(git -C /tmp/u log --format=%h); do git -C /tmp/u checkout -q $c; \
+#     echo "$c $(diff -rq --strip-trailing-cr --exclude=.git --exclude=VERSION \
+#       skills/vendor/reference-checker /tmp/u | wc -l)"; done
+#   # 差异最少的提交即同步基点；CRLF 用 --strip-trailing-cr 归一化。

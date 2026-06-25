@@ -1,5 +1,20 @@
 # journal-adapt — vendored third-party skill
 upstream: https://github.com/WantongC/journal-adapt-writing-skill
 license: MIT (see ./LICENSE)
-synced_commit: unknown   # 初次 vendor 时手动复制，未记录上游 commit；下次同步请填入上游 HEAD hash
-modifications: yes        # 本仓库已在其基础上修改（方法族感知聚合 + 计量装置一级信号）；详见 ./LICENSE 的 MODIFICATIONS 段
+synced_commit: cc79265b0acc21bc488c4c3004d89113cf19335a   # main HEAD（内容比对确定，见下）
+synced_branch: main
+
+# 目录已扁平化：上游把 skill 内容放在 skill/ 子目录（SKILL.md / README.md / base_rules/），
+#   本仓库为符合 Claude Code skill 结构，将 skill/* 上提到顶层，并保留上游顶层 docs/。
+#   路径映射：本仓库 SKILL.md ← 上游 skill/SKILL.md；base_rules/* ← skill/base_rules/*；docs/* ← 顶层 docs/*。
+#
+# modifications（本仓库在其基础上的修改：方法族感知聚合 + 计量装置一级信号）：
+#   改动文件：SKILL.md, docs/MODULES.md, docs/INSTALLATION.md, base_rules/economics.md,
+#            docs/templates/journal_style_card_template.md, docs/templates/paper_style_card_template.md,
+#            README.md, LICENSE（追加 MODIFICATIONS 段，见 ./LICENSE）。
+#   未改动、与上游 cc79265 逐字一致者：base_rules/{cs_engineering,general_academic,ml_cv_nlp}.md,
+#            docs/{ARCHITECTURE,STATIC_SKILL_RECOMMENDATIONS}.md, docs/templates/{revision_log,skill_template}_template.md。
+#
+# 如何复核 / 更新 synced_commit（注意上游 skill/ 子目录与本仓库顶层的路径映射）：
+#   git clone https://github.com/WantongC/journal-adapt-writing-skill /tmp/u
+#   # 对每个提交，按上表映射逐文件 diff --strip-trailing-cr；未改动文件全部命中的提交即同步基点。
