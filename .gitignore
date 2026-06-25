@@ -25,5 +25,15 @@ desktop.ini
 converted/
 _style_cards/
 
+# 图表工具的渲染 / 中间产物（scripts/ 脚本生成，非发布物）
+_exhibit_images/
+_smoke_out/
+_testdrive/
+exhibit_map.json
+*.aux
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+
 # 语料构建脚手架（仅本地：原始 PDF / 转写语料 / 蒸馏中间产物，非发布产物，~400MB+）
 corpus_build/

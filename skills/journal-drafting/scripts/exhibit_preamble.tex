@@ -1,0 +1,44 @@
+% exhibit_preamble.tex — 图表渲染所需的最小 LaTeX 前导（阶段一工具）
+% 在正文主文件 \usepackage 区 \input 本片段即可让 esttab 的 booktabs 三线表正常排版。
+%
+% 设计：三线表 = booktabs；表注 = threeparttable；题注样式 = caption。
+% siunitx 小数对齐为可选增强（默认注释掉，避免环境缺包导致编译失败）。
+
+\usepackage{booktabs}        % 三线表：\toprule \midrule \bottomrule \cmidrule
+\usepackage{threeparttable}  % 表注：\begin{tablenotes} ... \end{tablenotes}
+\usepackage{caption}         % 题注样式；图下表上的位置由正文 \caption 决定
+\usepackage{multirow}        % 偶尔的跨行表头
+% \usepackage{siunitx}       % 可选：S 列做小数点对齐（启用后表格更齐，但需该宏包）
+% \captionsetup[table]{skip=4pt}
+
+% esttab 用 \sym{} 渲染显著性星号上标；fragment 模式不含其定义，必须在前导补上：
+\providecommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+% —— 推荐的"图表盒子"用法（题注：表在上、图在下；与 EER 实证一致）——
+%
+% exhibit_table 用 `fragment` 产出的是【表体】（行 + 内部 \midrule/\cmidrule），
+% 不含 \begin{tabular} 与首尾 \toprule/\bottomrule —— 由 LaTeX 端补全：
+%   N = 模型数（列数）；列型 r（数字右对齐）或启用 siunitx 后用 S 做小数对齐。
+%
+%   \begin{table}[t]\centering
+%     \caption{Effects of FTAs on trade}\label{tab:main}
+%     \begin{threeparttable}
+%       \begin{tabular}{l*{3}{r}}     % 3 = 模型数
+%         \toprule
+%         \input{tabX}                % esttab fragment（表体）
+%         \bottomrule
+%       \end{tabular}
+%       \begin{tablenotes}[flushleft]\footnotesize
+%         \item \textit{Notes}: PPML estimates; sample = 109 countries, 1991--2015.
+%               Standard errors clustered by country pair in parentheses.
+%         \item * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+%       \end{tablenotes}
+%     \end{threeparttable}
+%   \end{table}
+%
+% 图（exhibit_figs 产出的 PDF）：
+%   \begin{figure}[t]\centering
+%     \includegraphics[width=.8\linewidth]{fig3}
+%     \caption{Country-specific effects of the sanctions.}\label{fig:main}
+%     \captionsetup{font=footnotesize}
+%   \end{figure}
