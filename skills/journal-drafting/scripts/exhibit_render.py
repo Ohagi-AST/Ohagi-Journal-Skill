@@ -13,7 +13,7 @@ exhibit_render.py — 无 Stata / 无 LaTeX 也能渲染 house-style 图表的 P
 ⛔ 铁律（接母版规则 5/6）：本工具只是【真实估计】的格式化器，绝不编造/手写
    系数、标准误、N、p。所有数字必须来自用户真实回归的输出（由调用方传入）。
 
-依赖：仅 pandas + matplotlib（不依赖 Stata、不依赖 LaTeX 引擎）。
+依赖：表格渲染无第三方依赖；画图仅需 matplotlib（不依赖 Stata、不依赖 LaTeX 引擎）。
   - render_table 产出的是【纯文本 LaTeX 片段】，本身不需要 LaTeX 即可生成；
     要编译成 PDF 时才需 booktabs 宏包（见 exhibit_preamble.tex）。
   - render_coefplot / render_event_study 用 matplotlib 直接出 PDF/PNG，全程不碰 LaTeX。
@@ -54,8 +54,29 @@ def _fmt(x, nd=3):
     return f"{x:.{nd}f}"
 
 
+_LATEX_ESCAPES = {
+    "\\": r"\textbackslash{}",
+    "&": r"\&",
+    "%": r"\%",
+    "$": r"\$",
+    "#": r"\#",
+    "_": r"\_",
+    "{": r"\{",
+    "}": r"\}",
+    "~": r"\textasciitilde{}",
+    "^": r"\textasciicircum{}",
+}
+
+
+def _latex_escape(value):
+    """Escape plain user text before inserting it into a LaTeX table."""
+    if value is None:
+        return ""
+    return "".join(_LATEX_ESCAPES.get(ch, ch) for ch in str(value))
+
+
 def render_table(models, using=None, depvar=None, coef_order=None,
-                 stats=("N",), nd=3):
+                 stats=("N",), nd=3, escape_latex=True):
     r"""把多列回归结果渲染成 booktabs 三线表 LaTeX 片段（fragment）。
 
     参数
@@ -81,6 +102,9 @@ def render_table(models, using=None, depvar=None, coef_order=None,
         底部统计量行要打印哪些键（如 ("N", "R2")），缺失的列留空。
     nd : int
         系数/SE 小数位（默认 3，与 .do 的 b(%9.3f) se(%9.3f) 一致）。
+    escape_latex : bool
+        默认转义用户传入的表头、列标题、变量名与自定义统计量名。若调用方已传入
+        原生 LaTeX，可设为 False 以保留旧行为。
 
     返回
     ----
@@ -91,7 +115,10 @@ def render_table(models, using=None, depvar=None, coef_order=None,
     if k == 0:
         raise ValueError("render_table: models 不能为空")
 
-    titles = [m.get("title") or f"({i})" for i, m in enumerate(models, 1)]
+    def display_text(value):
+        return _latex_escape(value) if escape_latex else str(value)
+
+    titles = [display_text(m.get("title") or f"({i})") for i, m in enumerate(models, 1)]
 
     if coef_order is None:
         coef_order = []
@@ -108,7 +135,7 @@ def render_table(models, using=None, depvar=None, coef_order=None,
 
     # 可选跨列被解释变量表头
     if depvar:
-        lines.append(f"& \\multicolumn{{{k}}}{{c}}{{{depvar}}} \\\\")
+        lines.append(f"& \\multicolumn{{{k}}}{{c}}{{{display_text(depvar)}}} \\\\")
         lines.append(f"\\cmidrule(lr){{2-{k + 1}}}")
 
     # 列号行
@@ -129,14 +156,16 @@ def render_table(models, using=None, depvar=None, coef_order=None,
             p = entry[2] if len(entry) > 2 else None
             coef_cells.append(f"{_fmt(b, nd)}{stars(p)}")
             se_cells.append(f"({_fmt(se, nd)})" if se is not None else "")
-        lines.append(f"{name} & " + " & ".join(coef_cells) + r" \\")
+        lines.append(f"{display_text(name)} & " + " & ".join(coef_cells) + r" \\")
         lines.append(" & " + " & ".join(se_cells) + r" \\")
 
     # 统计量行
     if stats:
         lines.append(r"\midrule")
         for key in stats:
-            label = stat_labels.get(key, key)
+            label = stat_labels.get(key)
+            if label is None:
+                label = display_text(key)
             cells = []
             for m in models:
                 v = m.get("stats", {}).get(key)

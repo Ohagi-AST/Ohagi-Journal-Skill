@@ -78,7 +78,7 @@ def render_one(pdf_path, pages_spec, dpi, out_root):
             print( "      2) 从期刊官网/机构库下载未加密的正式版（投稿/出版版通常不加开档口令）；")
             print( "      3) 若你有合法访问权，用阅读器另存/打印成无密码 PDF 后再处理。")
             doc.close()
-            return 0
+            return None
 
     pages = parse_pages(pages_spec, doc.page_count)
     written = 0
@@ -99,25 +99,45 @@ def main():
     ap.add_argument("--pages", default="all", help="页码：'all' | '10-15' | '12,14,20-22'（1-indexed）")
     ap.add_argument("--dpi", type=int, default=180, help="渲染 dpi（默认 180；表格细节可 200–250）")
     ap.add_argument("--out", default="_exhibit_images", help="输出根目录（默认 ./_exhibit_images）")
+    ap.add_argument("--allow-empty", action="store_true",
+                    help="允许没有渲染出任何页面时仍返回 0；不会掩盖缺失文件或处理错误")
     args = ap.parse_args()
 
     # 展开通配（Windows shell 不一定展开）
     paths = []
     for pat in args.pdfs:
         hits = glob.glob(pat)
-        paths.extend(hits if hits else [pat])
+        if hits:
+            paths.extend(hits)
+        elif glob.has_magic(pat):
+            print(f"[empty] 通配符未匹配任何 PDF：{pat}")
+        else:
+            paths.append(pat)
 
     total = 0
+    failures = 0
     for pdf_path in paths:
         if not os.path.isfile(pdf_path):
             print(f"[skip] 找不到：{pdf_path}")
+            failures += 1
             continue
         try:
-            total += render_one(pdf_path, args.pages, args.dpi, args.out)
+            written = render_one(pdf_path, args.pages, args.dpi, args.out)
+            if written is None:
+                failures += 1
+            else:
+                total += written
         except Exception as e:
             print(f"[ERR] {pdf_path}: {e}")
+            failures += 1
     print(f"\n共渲染 {total} 张 PNG → {os.path.abspath(args.out)}")
+    if failures:
+        return 1
+    if total == 0 and not args.allow_empty:
+        print("[ERR] 没有渲染出任何页面；若这是预期结果，请显式加 --allow-empty。")
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

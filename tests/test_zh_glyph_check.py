@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """zh_glyph_check.py 测试：检出中文残留字形、不误报中日同形字。"""
+import os
+import subprocess
+import sys
+import tempfile
 import unittest
 import _paths  # noqa: F401
 import zh_glyph_check as z
@@ -51,6 +55,41 @@ class TestScan(unittest.TestCase):
         self.assertEqual(len(hits), 1)
         line, col, ch, jp, ctx = hits[0]
         self.assertEqual((ch, jp), ("发", "発"))
+
+
+class TestCli(unittest.TestCase):
+    SCRIPT = os.path.join(_paths.SCRIPTS, "zh_glyph_check.py")
+
+    def run_cli(self, *args, input_text=None):
+        return subprocess.run(
+            [sys.executable, self.SCRIPT, *args],
+            input=input_text,
+            text=True,
+            encoding="utf-8",
+            capture_output=True,
+        )
+
+    def test_fix_file_writes_fixed_copy(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "draft.txt")
+            with open(path, "w", encoding="utf-8") as f:
+                f.write("經濟發展")
+            proc = self.run_cli(path, "--fix")
+            fixed = os.path.join(d, "draft.fixed.txt")
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            self.assertTrue(os.path.isfile(fixed))
+            with open(fixed, encoding="utf-8") as f:
+                self.assertEqual(f.read(), "経済発展")
+
+    def test_fix_stdin_stdout_is_clean(self):
+        proc = self.run_cli("-", "--fix", input_text="經濟發展\n")
+        self.assertEqual(proc.returncode, 0)
+        self.assertEqual(proc.stdout, "経済発展\n")
+        self.assertIn("检测到", proc.stderr)
+
+    def test_fail_on_hit_returns_nonzero(self):
+        proc = self.run_cli("-", "--fail-on-hit", input_text="經濟發展\n")
+        self.assertEqual(proc.returncode, 1)
 
 
 if __name__ == "__main__":

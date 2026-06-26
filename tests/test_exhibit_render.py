@@ -57,6 +57,29 @@ class TestRenderTable(unittest.TestCase):
         self.assertIn(r"\multicolumn{2}{c}{log exports}", self.tex)
         self.assertIn(r"\cmidrule(lr){2-3}", self.tex)
 
+    def test_user_text_is_latex_escaped_by_default(self):
+        tex = r.render_table(
+            [{"title": "A&B", "coefs": {"log_GDP%": (1.2, 0.3, 0.04)},
+              "stats": {"N": 10, "mean_rate%": 0.42}}],
+            depvar="share_%",
+            stats=("N", "mean_rate%"),
+        )
+        self.assertIn(r"\multicolumn{1}{c}{share\_\%}", tex)
+        self.assertIn(r"A\&B", tex)
+        self.assertIn(r"log\_GDP\%", tex)
+        self.assertIn(r"mean\_rate\%", tex)
+        self.assertIn(r"\(R^{2}\)", r.render_table(self.models, stats=("R2",)))
+
+    def test_latex_escape_can_be_disabled(self):
+        tex = r.render_table(
+            [{"coefs": {"log_GDP%": (1.2, 0.3, 0.04)}, "stats": {"N": 10}}],
+            depvar="share_%",
+            escape_latex=False,
+        )
+        self.assertIn("share_%", tex)
+        self.assertIn("log_GDP%", tex)
+        self.assertNotIn(r"log\_GDP\%", tex)
+
     def test_empty_models_raises(self):
         with self.assertRaises(ValueError):
             r.render_table([])

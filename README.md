@@ -1,6 +1,6 @@
 # Ohagi-Journal-Skill
 
-> 一套面向 **「研究已完成 → 开始把成果写成正式英文期刊级论文（或学位论文正文）」** 这一步的可复用写作框架。三个组件都是**纯 Markdown skill**，可配合 [Claude Code](https://claude.com/claude-code)、Codex 等任何支持 skill 机制的 AI agent 使用（不支持 skill 文件夹的环境，也可直接让 agent 读对应的 `SKILL.md` 执行）。
+> 一套面向 **「研究已完成 → 开始把成果写成正式英文期刊级论文（或学位论文正文）」** 这一步的可复用写作框架。三个组件都是 **Markdown-first skill**，并附带可选脚本工具链；可配合 [Claude Code](https://claude.com/claude-code)、Codex 等任何支持 skill 机制的 AI agent 使用（不支持 skill 文件夹的环境，也可直接让 agent 读对应的 `SKILL.md` 执行）。
 
 把 agent harness 的设计思路 —— *Rules-as-spec（规则即规范）＋ Verification-loop（验证闭环）＋ Memory（记忆防漂移）* —— 落到论文成稿的全过程：从锁定目标期刊、搭骨架、逐节写、控制主张强度，到引用穷尽核验和审稿人预演。
 
@@ -105,7 +105,7 @@ Copy-Item -Recurse -Force skills\vendor\journal-adapt      "$HOME\.claude\skills
 | [`docs/reference/rules-overview.md`](docs/reference/rules-overview.md) | 母版通用硬规则 1–9 一页速查 |
 | [`docs/reference/field-templates/README.md`](docs/reference/field-templates/README.md) | 把自己的领域写作惯例加进来的模板 |
 
-> `tests/` 下是 Python 工具链单测 + 跨文件一致性元检查 + 冒烟测试，跑 `python -m unittest discover -s tests` 即可。
+> `tests/` 下是 Python 工具链单测 + 跨文件一致性元检查 + 冒烟测试。先跑 `python -m pip install -r requirements-dev.txt` 安装测试依赖，再跑 `python -m unittest discover -s tests`。
 
 ---
 

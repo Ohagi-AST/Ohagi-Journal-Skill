@@ -10,7 +10,7 @@
 | 文件 | 作用 |
 |---|---|
 | `pdf_to_png.py` | PDF（含加密）→ PNG。去 owner-password + 高清栅格化，供视觉读图。 |
-| `exhibit_render.py` | **Python 等价渲染器**（仅 `pandas`+`matplotlib`，不依赖 Stata/LaTeX）：`render_table` 三线表片段 / `render_coefplot` / `render_event_study`。house-style 与下面两个 `.do` 对齐。`--demo` 看产物。 |
+| `exhibit_render.py` | **Python 等价渲染器**（不依赖 Stata/LaTeX；表格渲染无第三方依赖，画图用 `matplotlib`）：`render_table` 三线表片段 / `render_coefplot` / `render_event_study`。house-style 与下面两个 `.do` 对齐。`--demo` 看产物。 |
 | `exhibit_style.do` | 三线表渲染封装 `exhibit_table`（锁定 esttab house-style：booktabs/星号/SE/列号/跨列头）。 |
 | `exhibit_figs.do` | 图标准：黑白 `s1mono` 主题 + `graph_export_exhibit`（固定尺寸导出）+ `exhibit_coefplot`（系数图）。 |
 | `exhibit_map.py` | 跨论文抽「图表叙事结构」：图表清单 / 章节位置 / 正文交叉引用句 / 主-附切分。 |
@@ -21,7 +21,7 @@
 | `RECON_图表发现.md` | EER 图表视觉 house-style 侦察报告。 |
 
 ## 环境（本机已验证）
-- Python + **PyMuPDF**（`pip install pymupdf`）
+- Python + **PyMuPDF**（`pip install pymupdf`）；画图另需 `matplotlib`。开发/测试可直接 `python -m pip install -r ../../../requirements-dev.txt`
 - **StataMP 18** + `ssc install estout coefplot`
 - LaTeX：`latexmk` + `pdflatex`（TeX Live/MiKTeX）
 
@@ -51,6 +51,13 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex   # main.tex 见 _
 python ../pdf_to_png.py main.pdf --out pngs --dpi 170           # → pngs/main/main_p001.png
 # 然后用 Read 工具看这张 PNG，核：三线表？无竖线/九宫格？星号/SE/对齐/表注达标？
 ```
+
+### D. 日语稿中文残留字形检查
+```bash
+python zh_glyph_check.py draft.txt
+python zh_glyph_check.py draft.txt --fix
+```
+Windows 下优先传 UTF-8 文本文件路径；不同终端的 `echo ... | python zh_glyph_check.py -` 管道编码可能不稳定。需要在自动化里拦截残留时，加 `--fail-on-hit`。
 
 ## 铁律
 - **三线表**：booktabs 顶/中/底线，**禁竖线/全框线/九宫格**。

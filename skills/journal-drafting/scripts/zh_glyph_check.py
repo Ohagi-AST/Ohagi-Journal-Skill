@@ -128,24 +128,30 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("path", help="文本文件路径，- 表示 stdin")
     ap.add_argument("--fix", action="store_true", help="另存纠正版（正文替换；引用/专名区需人工复核）")
+    ap.add_argument("--fail-on-hit", action="store_true", help="检测到残留字形时返回 1，便于 CI/脚本拦截")
     args = ap.parse_args()
     text = sys.stdin.read() if args.path == "-" else open(args.path, encoding="utf-8").read()
     lines = text.splitlines(keepends=True)
+    report_stream = sys.stderr if args.fix and args.path == "-" else sys.stdout
 
     hits = list(scan(lines))
+    exit_code = 1 if hits and args.fail_on_hit else 0
     if not hits:
-        print("✅ 未检测到中文汉字残留。"); return
+        print("✅ 未检测到中文汉字残留。", file=report_stream)
+        if args.fix and args.path == "-":
+            sys.stdout.write(text)
+        return exit_code
     agg = OrderedDict()
     for _, _, ch, jp, _ in hits:
         agg.setdefault(ch, [jp, 0]); agg[ch][1] += 1
-    print(f"⚠️ 检测到 {len(agg)} 种中文残留汉字，共 {len(hits)} 处：\n")
+    print(f"⚠️ 检测到 {len(agg)} 种中文残留汉字，共 {len(hits)} 处：\n", file=report_stream)
     for ch, (jp, n) in sorted(agg.items(), key=lambda x: -x[1][1]):
-        print(f"  「{ch}」→ 「{jp}」  ×{n}")
-    print("\n位置明细（行:列）：")
+        print(f"  「{ch}」→ 「{jp}」  ×{n}", file=report_stream)
+    print("\n位置明细（行:列）：", file=report_stream)
     for i, c, ch, jp, ctx in hits[:200]:
-        print(f"  {i}:{c}  {ch}→{jp}   …{ctx}…")
+        print(f"  {i}:{c}  {ch}→{jp}   …{ctx}…", file=report_stream)
     if len(hits) > 200:
-        print(f"  …另有 {len(hits)-200} 处")
+        print(f"  …另有 {len(hits)-200} 处", file=report_stream)
 
     if args.fix:
         fixed = text
@@ -155,10 +161,11 @@ def main():
                else os.path.splitext(args.path)[0] + ".fixed" + os.path.splitext(args.path)[1])
         if out != "/dev/stdout":
             open(out, "w", encoding="utf-8").write(fixed)
-            print(f"\n📝 已另存纠正版: {out}")
-            print("⚠️ 注意：引用的中文文献题名・中国人名地名（如 深圳/《经济研究》）可能被一并替换，请人工复核这些区域。")
+            print(f"\n📝 已另存纠正版: {out}", file=report_stream)
+            print("⚠️ 注意：引用的中文文献题名・中国人名地名（如 深圳/《经济研究》）可能被一并替换，请人工复核这些区域。", file=report_stream)
         else:
             sys.stdout.write(fixed)
+    return exit_code
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

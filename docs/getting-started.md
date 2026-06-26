@@ -37,12 +37,14 @@ agent 会：
 
 会走**日语优化快速入口**，跳过起草全流程，直奔净化层（清中文打底残留）+ 文体层（投稿轨 / 修論轨）。
 
+Windows 下做字形检查时，优先把文本保存成 UTF-8 文件后运行 `python skills/journal-drafting/scripts/zh_glyph_check.py draft.txt`；不同终端的 `echo ... | python ...` 管道编码不一定稳定。
+
 ## 4. 想渲染图表但没装 Stata？
 
 图表蓝图的渲染环节**按环境三选一**（见 [`SKILL.md`](../skills/journal-drafting/SKILL.md) 图表蓝图第 5 步）：
 
 - 有 **Stata** → `scripts/exhibit_style.do` + `scripts/exhibit_figs.do`；
-- 无 Stata、有 **Python**（`pandas`+`matplotlib`）→ `scripts/exhibit_render.py`（`python exhibit_render.py --demo` 先看产物）；
+- 无 Stata、有 **Python** → `scripts/exhibit_render.py`（表格渲染不需要第三方库；画图需 `matplotlib`，`python exhibit_render.py --demo` 先看产物）；
 - 两者都没有 → 退化为三线表 Markdown 模板手填 + 视觉自检清单。
 
 ## 下一步

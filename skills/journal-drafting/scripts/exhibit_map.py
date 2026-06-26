@@ -34,10 +34,12 @@ except ImportError:
     except ImportError:
         sys.exit("[!] 缺 PyMuPDF：pip install pymupdf")
 
-# 题注：行首 Table/Fig./Figure + 编号（含 A1/B2 等附录前缀）
-CAP_RE = re.compile(r'^(Table|Fig\.|Figure|Fig)\s+([A-Z]?\.?\d+[A-Za-z]?)\.?\s*(.*)$')
-# 正文交叉引用：句中出现的 Table N / Fig. N
-XREF_RE = re.compile(r'(Table|Fig\.|Figure|Fig)\s+([A-Z]?\.?\d+[A-Za-z]?)')
+# 题注：行首 Table/Fig./Figure + 编号（含 A1/B2 等附录前缀），兼容句点/冒号。
+CAP_RE = re.compile(r'^(Tables?|Figs?\.?|Figures?)\s+([A-Z]?\.?\d+[A-Za-z]?)\.?\s*:?\s*(.*)$', re.I)
+_NUM_RE = r'[A-Z]?\.?\d+[A-Za-z]?'
+_NUM_SEP_RE = r'(?:\s*,\s*(?:and\s+|or\s+)?|\s+(?:and|or|to)\s+|\s*[-–]\s*)'
+# 正文交叉引用：句中出现的 Table N / Fig. N，含复数列表与简单范围。
+XREF_RE = re.compile(rf'\b(Tables?|Figs?\.?|Figures?)\s+({_NUM_RE}(?:{_NUM_SEP_RE}{_NUM_RE})*)', re.I)
 # 章节标题：行首 "4 Results" / "4. Results" / "4.1 ..." （首词数字，后接大写词）
 SEC_RE = re.compile(r'^(\d{1,2}(?:\.\d{1,2})?)\.?\s+([A-Z][A-Za-z][^\n]{1,48})$')
 # 附录边界
@@ -45,8 +47,31 @@ APPX_RE = re.compile(r'^\s*(Online\s+)?Appendix\b', re.I)
 
 
 def norm(lbl, num):
-    lbl = "Fig." if lbl.lower().startswith("fig") else lbl.capitalize()
+    lbl = "Fig." if lbl.lower().startswith("fig") else "Table"
     return f"{lbl} {num}"
+
+
+def _nums_from_spec(spec):
+    nums = re.findall(_NUM_RE, spec)
+    simple_range = re.fullmatch(r'\s*(\d+)\s*[-–]\s*(\d+)\s*', spec)
+    if simple_range:
+        a, b = int(simple_range.group(1)), int(simple_range.group(2))
+        step = 1 if a <= b else -1
+        return [str(n) for n in range(a, b + step, step)]
+    return nums
+
+
+def extract_xref_labels(sentence):
+    """Return normalized exhibit labels referenced in one sentence."""
+    labels = []
+    seen = set()
+    for m in XREF_RE.finditer(sentence):
+        for num in _nums_from_spec(m.group(2)):
+            label = norm(m.group(1), num)
+            if label not in seen:
+                seen.add(label)
+                labels.append(label)
+    return labels
 
 
 # 学术文本里带句点、但不该触发断句的缩写（句点是缩写的一部分，不是句末）。
@@ -119,8 +144,7 @@ def analyze(pdf_path, maxxref):
     bylabel = {e["label"]: e for e in exhibits}
     for t in pages_text:
         for sent in split_sentences(t):
-            for m in XREF_RE.finditer(sent):
-                label = norm(m.group(1), m.group(2))
+            for label in extract_xref_labels(sent):
                 e = bylabel.get(label)
                 if e is None:
                     continue
@@ -141,22 +165,36 @@ def main():
     ap.add_argument("pdfs", nargs="+")
     ap.add_argument("--json", default="exhibit_map.json")
     ap.add_argument("--maxxref", type=int, default=2, help="stdout 每图表最多打印几句 xref")
+    ap.add_argument("--allow-empty", action="store_true",
+                    help="允许没有有效 PDF 结果时仍返回 0；不会掩盖缺失文件或处理错误")
     args = ap.parse_args()
 
     paths = []
     for pat in args.pdfs:
         hits = glob.glob(pat)
-        paths.extend(hits if hits else [pat])
+        if hits:
+            paths.extend(hits)
+        elif glob.has_magic(pat):
+            print(f"[empty] 通配符未匹配任何 PDF：{pat}")
+        else:
+            paths.append(pat)
 
     results = []
+    failures = 0
     for p in paths:
         if not os.path.isfile(p):
             print(f"[skip] {p}")
+            failures += 1
             continue
         try:
             results.append(analyze(p, args.maxxref))
         except Exception as e:
             print(f"[ERR] {p}: {e}")
+            failures += 1
+
+    if not results and not args.allow_empty:
+        print("[ERR] 没有生成任何有效 PDF 分析结果；若这是预期结果，请显式加 --allow-empty。")
+        return 1
 
     # 紧凑 stdout
     tot_t = tot_f = tot_appx = 0
@@ -180,7 +218,8 @@ def main():
     with open(args.json, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=1)
     print(f"# JSON 全量明细 → {os.path.abspath(args.json)}")
+    return 1 if failures else 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
