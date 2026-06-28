@@ -86,6 +86,34 @@
 - **采用形式**：调用其公开命令/库，**未复制、未随包分发**其代码。
 - **许可证/环境**：estout/coefplot 经 `ssc install`；PyMuPDF `pip install pymupdf`；本机 StataMP 18。各依其上游许可证。
 
+## 9. hanlulong/econ-writing-skill
+
+- **仓库**：https://github.com/hanlulong/econ-writing-skill
+- **核验快照**：commit `d2a57f05948c4fd87dbec91cd00d761b761db926`（2026-05-30）；本项目核验于 2026-06-28。
+- **是什么**：把 50+ 份经济学写作指南整理成 Agent Skill，含分节配方、识别策略、现代实证规范、审查/投稿任务和 18 个语义评测用例。
+- **我们吸收/改造了什么**：
+  - `references/en-section-playbooks.md`：标题、摘要、引言、模型、数据、结果、零结果、结论与附录的条件式 playbook。
+  - `references/en-identification-strategies.md`：按 estimand/识别变异/假设/exhibit/推断/威胁/主张上限/呈现顺序统一重写的方法卡。
+  - `references/en-empirical-standards.md`：不确定性、多重检验、PAP、规格稳健性、复现与 AI 披露审计。
+  - `references/en-submission-workflows.md`：快速/深度审查、working-paper 缩稿和 R&R；评测思想落到根 `evals/` 与确定性守卫测试。
+- **明确未采用**：无输入事实仍要求具体效应量、虚构示例数字、缺数字时给 illustrative value、强制破折号/句长配额/故意粗糙等“反 AI 表演”、固定页数/段落比例、Top-5 百分制和硬编码期刊政策。
+- **采用形式**：在 MIT 许可下理解后重组、改写并与本项目证据护栏/两层路由（六条快捷路径）/渐进加载架构整合；未整份复制上游 SKILL。
+- **许可证**：MIT（上游 `LICENSE`）。
+
+### 规则到一手来源的追溯锚点
+
+| 规则族 | 一手/权威锚点 | 本项目落点 | 最后核验 |
+|---|---|---|---|
+| Reader-first、三角结构、识别优先 | John Cochrane, *Writing Tips for Ph.D. Students* | 分节 playbook、风格层、识别审计 | 2026-06-28 |
+| 简洁、主动、具体语言 | Deirdre McCloskey, *Economical Writing*；Goldin & Katz, JMP rules | 风格层、分节 playbook | 2026-06-28 |
+| 引言与应用论文组织 | Keith Head, *The Introduction Formula*；Jesse Shapiro, *Four Steps*；Marc Bellemare, applied-paper guide | 分节 playbook | 2026-06-28 |
+| 理论模型呈现 | Edward Glaeser, low-brow theory paper；Hal Varian, model building | 理论/结构 playbook | 2026-06-28 |
+| 数据可视化 | Jonathan Schwabish, JEP data-visualization guide | 图表蓝图与视觉自检 | 2026-06-28 |
+| 现代识别与推断 | 各方法卡点名的原始/方法论文；使用前逐条核验版本 | 方法卡、现代实证审计 | 2026-06-28 |
+| 数据/代码与 AI 政策 | 目标刊/学会当前官方 Data/Code/AI policy | 投稿工作流；不在静态 skill 写死政策 | 每次投稿现查 |
+
+上游完整来源排名与链接见 https://github.com/hanlulong/econ-writing-skill/blob/main/sources/SOURCES_RANKED.md 。本表只记录本项目实际采用规则的追溯锚点，不以作者头衔或来源数量代替规则论证。
+
 ---
 
 ## 维护说明

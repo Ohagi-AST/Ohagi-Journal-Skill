@@ -1,142 +1,182 @@
 # Ohagi-Journal-Skill
 
-> 一套面向 **「研究已完成 → 开始把成果写成正式论文正文」** 这一步的可复用写作框架。核心场景是**实证经济学论文**（英文期刊稿、学位论文、图表叙事、日文稿整理），规则也可迁移到相近社会科学论文。三个组件都是 **Markdown-first skill**，并附带可选脚本工具链；可配合 [Claude Code](https://claude.com/claude-code)、Codex 等任何支持 skill 机制的 AI agent 使用（不支持 skill 文件夹的环境，也可直接让 agent 读对应的 `SKILL.md` 执行）。
+> 面向经济学论文的成稿与投稿工作流：把**已经完成的研究**整理成英文期刊稿、学位论文，或直接处理日语、图表、英文局部改写与 R&R。
 
-把 agent harness 的设计思路 —— *Rules-as-spec（规则即规范）＋ Verification-loop（验证闭环）＋ Memory（记忆防漂移）* —— 落到论文成稿的全过程：从选择入口、锁定目标约束、搭骨架、做图表蓝图、逐节写、控制主张强度，到引用核验和投稿/答辩前预演。
+它不替作者发明研究。核心底线是：**不造数据、不造引用，主张强度不超过识别强度。**
 
-**语言**：框架正文为中文；英文术语用于检索和论文写作场景。英文期刊、学位论文、日文投稿/修論各有入口。
+## 30 秒选对路径
 
----
+先判断你要的是整篇交付，还是只处理一个模块。
 
-## 这是什么
-
-整套东西分两层：
-
-1. **母版规则书 + 风格层**（`skills/journal-drafting/template-master-framework.md` 及其 `references/`）—— 原创。一份跨论文复用的规则书：每开一篇新论文先过「最小启动闸」，正式正文前补齐「完整 SPEC」，通用硬规则（1–9）永不改、所有论文共用。
-2. **三个可调用的 skill**（`skills/`）—— 一个原创编排器（自带上面的母版）+ 两个第三方 MIT 工具，把流程串起来。
-
-设计哲学：**最小启动可以轻，正式正文必须过完整 SPEC**；**结论的语气 ≤ 识别的强度**（最硬的一条铁律）；**绝不编造引用**。
-
----
-
-## 我该走哪条路？
-
-| 入口 | 适合你如果 | 第一件事 |
+| 任务层级 | 快捷路径 | 是否需要完整 SPEC |
 |---|---|---|
-| 英文期刊成稿 | 研究已经完成，想写成英文期刊论文 | 过最小启动闸，再补完整 SPEC |
-| 学位论文正文 | 要写修士/博士论文或毕业论文正文 | 先锁学校规程、答辩委员视角和章结构 |
-| 已有日文稿整理 | 手里已有日文草稿，只想去中文味和统一学术文体 | 走日语优化快速入口，不进完整起草流程 |
-| 图表蓝图/图表规范 | 结果很多，想先决定图表顺序、主附放置和叙事弧 | 只走 exhibit plan |
+| **完整成稿主流程** | A. 英文期刊成稿；B. 学位论文正文 | 是。正式正文前必须补齐 |
+| **局部/专项任务** | C. 日文稿整理；D. 图表蓝图；E. 英文局部改写/审查；F. 投稿、缩稿与 R&R | 否。使用轻量任务卡 |
 
-完整入口说明和可复制 prompt 见 [`docs/entrypoints.md`](docs/entrypoints.md) 与 [`docs/getting-started.md`](docs/getting-started.md)。
-
----
-
-## 目录结构
-
-```
-Ohagi-Journal-Skill/
-├── skills/
-│   ├── journal-drafting/           ← 原创：起草编排器（自带母版规则书，开箱即用）
-│   │   ├── SKILL.md                （编排器：串流程、管交互节奏）
-│   │   ├── template-master-framework.md   （母版：最小启动闸 + 完整 SPEC + 通用硬规则 1–9 + 三道验证闸）
-│   │   ├── references/             （展开层：en-* 英文写作风格/文献宽度/纯净度/领域约定 + ja/ 日语优化两层）
-│   │   ├── scripts/                （图表渲染 exhibit_render.py/.do + zh_glyph_check.py 等工具链）
-│   │   └── credits-and-sources.md  （所有借鉴/采用来源的单一真相）
-│   └── vendor/                     ← 第三方 MIT 工具（随包附带，各带 VERSION 记录上游来源）
-│       ├── reference-checker/      ← 第三方 MIT（Liuxiangjian-ai）：投稿前参考文献穷尽核验
-│       └── journal-adapt/          ← 第三方 MIT（WantongC）：从目标刊语料萃取写作文化、生成动态写作 skill
-├── tests/                          （Python 工具链单测 + 跨文件一致性元检查 + 冒烟测试）
-├── LICENSE                         （原创部分 MIT）
-└── README.md
+```mermaid
+flowchart TD
+    U["你现在要完成什么？"] --> M{"整篇成稿还是局部任务？"}
+    M -->|整篇成稿| A["A 英文期刊稿"]
+    M -->|整篇成稿| B["B 学位论文"]
+    M -->|局部/专项| C["C 日文稿整理"]
+    M -->|局部/专项| D["D 图表蓝图"]
+    M -->|局部/专项| E["E 英文局部改写/审查"]
+    M -->|局部/专项| F["F 投稿审查/缩稿/R&R"]
+    A --> X["完整 SPEC → 骨架 → 图表 → 逐节写 → 终检"]
+    B --> X
 ```
 
----
+图表蓝图既是 A/B 结果型论文内部的标准阶段，也可以单独调用；它是流程模块，不是与期刊稿、学位论文平级的交付目标。用户意图明确时，skill 会直接命中路径，不会为了分类增加一次询问。
 
-## 怎么用
+## 它解决什么
 
-### 1. 安装三个 skill
+- **证据边界**：缺数字用 `【作者补】`，缺引用用 `【待核】`；关联设计不偷写成因果。
+- **方法感知**：按 `paper_type + method_family + primary estimand` 加载 RCT、DiD、IV、RDD、SCM/SDID、结构估计、描述/测量、bunching、shift-share、因果 ML 等方法卡。
+- **分节写作**：覆盖标题、摘要、引言、模型、数据、结果、零结果、结论和附录。
+- **图表先行**：先做 exhibit plan，再 write-to-exhibit；提供 Stata/Python 三线表与图形工具，并要求渲染后视觉自检。
+- **目标刊适配**：可从目标刊真实论文萃取动态写作层；精确页数、匿名、复现包和 AI 披露只采信当前官方要求。
+- **投稿收口**：引用核验、三视角深审、working-paper 缩稿、逐点 R&R/referee response。
+- **中日文支持**：日文稿可走字形、术语、直译腔和投稿/修論文体专项流程。
 
-先把仓库克隆下来：
+## 直接开始
+
+### A. 英文期刊完整成稿
+
+```text
+我有一篇经济学研究要写成英文期刊稿。研究问题是 [...]，目标期刊候选是 [...]，
+已有数据/回归/图表包括 [...]。请走 journal-drafting 的 A 路径，先过最小启动闸，
+不要直接写正文。
+```
+
+### B. 学位论文
+
+```text
+我要写学位论文正文。学校/研究科规程是 [...]，导师要求是 [...]，已有结果包括 [...]。
+请走 B 路径，先检查材料状态和章结构，不要套用期刊专属要求。
+```
+
+### C–F. 局部/专项任务
+
+```text
+# C 日文整理
+只整理下面的日文稿。目标是 [投稿刊/修論规程]；只改语言与文体，不动论证、数字和引用：[文本]
+
+# D 图表蓝图
+只做 exhibit plan。这里是结果清单 [...]；请决定头牌图表、叙事弧和主文/附录放置，不写正文。
+
+# E 英文局部
+只改写/审查下面这段 [abstract/results/conclusion]；保留原意，缺数字写【作者补】，缺引用写【待核】：[文本]
+
+# F 投稿/R&R
+逐点处理下面的审稿意见。作者已完成的真实修改是 [...]；没有的新分析、页码和表号一律标【作者补】：[意见]
+```
+
+更多可复制 prompt 和各路径输入要求见 [快速开始](docs/getting-started.md) 与 [路径选择](docs/entrypoints.md)。
+
+## A/B 完整成稿如何运行
+
+```text
+最小启动闸
+  → 完整 SPEC
+  → 可选：文献宽度扩展 / 目标刊动态写作层
+  → 章节骨架
+  → 图表蓝图（结果型论文）
+  → 逐节写作 + 单节自查
+  → 总闸
+  → 引用穷尽核验
+  → 审稿人/答辩委员预演
+```
+
+完整 SPEC 会持久化目标约束、结构母本、contribution、`paper_type`、`method_family`、`primary estimand`、主要/辅助识别、推断风险、外部有效性、PAP/预注册以及数据访问与复现状态。
+
+## 安装
+
+先克隆仓库：
 
 ```bash
 git clone https://github.com/Ohagi-AST/Ohagi-Journal-Skill.git
 cd Ohagi-Journal-Skill
 ```
 
-每个 skill 都自包含、装在哪都能跑。以 **Claude Code** 为例，把三个 skill 文件夹（原创的 `journal-drafting` + `vendor/` 下两个第三方）复制到它的 skill 目录：
+最低安装只需要原创编排器 `journal-drafting`。推荐同时安装两个随包 vendor skill，以启用引用核验和目标刊动态适配。
 
-**macOS / Linux（bash）：**
+### macOS / Linux
 
 ```bash
-# 在仓库根目录执行
 mkdir -p ~/.claude/skills
 cp -R skills/journal-drafting          ~/.claude/skills/
 cp -R skills/vendor/reference-checker  ~/.claude/skills/
 cp -R skills/vendor/journal-adapt      ~/.claude/skills/
 ```
 
-**Windows（PowerShell）：**
+### Windows PowerShell
 
 ```powershell
-# 在仓库根目录执行
 New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
 Copy-Item -Recurse -Force skills\journal-drafting          "$HOME\.claude\skills\"
 Copy-Item -Recurse -Force skills\vendor\reference-checker  "$HOME\.claude\skills\"
 Copy-Item -Recurse -Force skills\vendor\journal-adapt      "$HOME\.claude\skills\"
 ```
 
-> **其他 agent（Codex 等）**：装进各自的 skill / 自定义指令目录即可；若环境不支持 skill 文件夹，直接让 agent 读取对应文件夹下的 `SKILL.md` 并按其执行，效果相同。
-> `journal-drafting` 已**自带母版规则书**（`template-master-framework.md` + `references/`），无需任何额外放置或配置。
-> `journal-adapt` 的部分功能（PDF→Markdown）依赖 MinerU；若你的语料已是 Markdown/文本则无需安装。详见 `skills/vendor/journal-adapt/docs/INSTALLATION.md`。
+Codex 或其他 agent：复制到其 skill 目录即可；若环境不支持 skill 文件夹，直接让 agent 读取 `skills/journal-drafting/SKILL.md`。`journal-adapt` 的 PDF→Markdown 可选功能需要 MinerU；已有 Markdown/文本语料时不需要。
 
-### 2. 选择入口
+## 项目结构
 
-先看 [`docs/entrypoints.md`](docs/entrypoints.md)，选英文期刊成稿、学位论文正文、已有日文稿整理或图表蓝图。每条入口都给了「适合谁 / 准备什么 / 第一句 prompt / 会走哪些阶段 / 哪些可跳过」。
+```text
+skills/
+├── journal-drafting/
+│   ├── SKILL.md                    # 两层路由与交互编排
+│   ├── template-master-framework.md # A/B 完整成稿母版
+│   ├── references/                 # 分节、方法、实证、投稿、图表、日语规则
+│   ├── scripts/                    # 图表渲染、映射与日文字形检查
+│   └── agents/openai.yaml          # Codex UI 元数据
+└── vendor/
+    ├── reference-checker/          # 引用核验（MIT）
+    └── journal-adapt/              # 目标刊动态写作层（MIT）
 
-### 3. 低成本启动
+docs/                               # 用户文档
+evals/                              # 语义评测 prompts + rubric
+tests/                              # 工具链、链接一致性与语义守卫测试
+```
 
-材料不完整也可以先启动规划：只要给出入口、一句话研究问题、目标刊/学校规程/日语轨道、研究结果是否完成，agent 就能帮你判断下一步。正式逐节写正文前，仍必须补齐完整 SPEC（结构母本、contribution、识别红线、引用样式、数据出处等）。
+## 规则如何加载
 
----
+优先级固定为：
+
+1. 不造数/引用与主张上限；
+2. 目标刊当前官方要求；
+3. 目标刊动态层与真实语料；
+4. 论文类型与方法卡；
+5. 通用分节和语言默认值。
+
+主 `SKILL.md` 只保留路由和硬护栏，详细规则按任务从 `references/` 加载，避免一次把无关内容塞进上下文。
 
 ## 文档
 
-| 文档 | 内容 |
+| 文档 | 用途 |
 |---|---|
-| [`docs/entrypoints.md`](docs/entrypoints.md) | 四条入口：英文期刊、学位论文、日语整理、图表蓝图 |
-| [`docs/getting-started.md`](docs/getting-started.md) | 快速开始 + 可直接改用的示例 prompt |
-| [`docs/overview.md`](docs/overview.md) | 体系结构鸟瞰（两层结构、组件分工、流程主轴） |
-| [`docs/interaction-guide.md`](docs/interaction-guide.md) | 面向人类用户的交互说明（节奏、硬闸、加速/叫停） |
-| [`docs/reference/rules-overview.md`](docs/reference/rules-overview.md) | 母版通用硬规则 1–9 一页速查 |
-| [`docs/reference/field-templates/README.md`](docs/reference/field-templates/README.md) | 把自己的领域写作惯例加进来的模板 |
+| [路径选择](docs/entrypoints.md) | 两类需求、六条快捷路径、输入与升级条件 |
+| [快速开始](docs/getting-started.md) | 可复制 prompt 与工作流卡片 |
+| [体系概览](docs/overview.md) | 架构、组件和规则优先级 |
+| [交互说明](docs/interaction-guide.md) | 完整流程硬闸与专项任务节奏 |
+| [规则速查](docs/reference/rules-overview.md) | 母版规则 1–9 |
+| [来源与致谢](skills/journal-drafting/credits-and-sources.md) | 采用内容、许可证和一手来源锚点 |
 
-> `tests/` 下是 Python 工具链单测 + 跨文件一致性元检查 + 冒烟测试。先跑 `python -m pip install -r requirements-dev.txt` 安装测试依赖，再跑 `python -m unittest discover -s tests`。
+## 验证
 
----
+```bash
+python -m pip install -r requirements-dev.txt
+python -m unittest discover -s tests
+python tests/smoke_test.py
+```
 
-## 第三方组件与致谢
+测试覆盖脚本工具链、内部链接、术语一致性、六条快捷路由、完整 SPEC、安全护栏和语义评测结构。语义场景见 [`evals/test-cases.md`](evals/test-cases.md)。
 
-`skills/` 下两个工具是**别人的 MIT 开源项目**，本仓库按其 MIT 许可证随包附带、保留原作者署名：
+## 第三方组件与许可证
 
-| 组件 | 来源 | 许可证 |
-|---|---|---|
-| `skills/vendor/reference-checker/` | [Liuxiangjian-ai/reference-checker-skill](https://github.com/Liuxiangjian-ai/reference-checker-skill) | MIT（见该子目录 `LICENSE`；上游来源记于 `VERSION`） |
-| `skills/vendor/journal-adapt/` | [WantongC/journal-adapt-writing-skill](https://github.com/WantongC/journal-adapt-writing-skill) | MIT（见该子目录 `LICENSE`）·**本仓库已在其基础上修改**（方法族感知聚合 + 计量装置信号；改动详见该子目录 `LICENSE` 的 MODIFICATIONS 段；上游来源记于 `VERSION`） |
+- 原创部分 `skills/journal-drafting/`：MIT，见根 [LICENSE](LICENSE)。
+- `skills/vendor/reference-checker/`：Liuxiangjian-ai/reference-checker-skill，MIT。
+- `skills/vendor/journal-adapt/`：WantongC/journal-adapt-writing-skill，MIT；本仓库保留上游署名与修改说明。
+- 写作规则还借鉴了 [hanlulong/econ-writing-skill](https://github.com/hanlulong/econ-writing-skill)、[lishn6/awesome-ai-econ-research-writing](https://github.com/lishn6/awesome-ai-econ-research-writing)、[Lambenthan/empiricalwiki](https://github.com/Lambenthan/empiricalwiki) 等项目；具体采用边界见[来源与致谢](skills/journal-drafting/credits-and-sources.md)。
 
-母版在搭建中还借鉴了若干开源仓库的**方法论、结构与清单**（未复制其内容）：
-[affaan-m/ecc](https://github.com/affaan-m/ecc)、
-[lishn6/awesome-ai-econ-research-writing](https://github.com/lishn6/awesome-ai-econ-research-writing)、
-[Lambenthan/empiricalwiki](https://github.com/Lambenthan/empiricalwiki)、
-[juliaError/econ-TopJournal-writing-Skill](https://github.com/juliaError/econ-TopJournal-writing-Skill)（CC BY-NC，仅再造思路、未复制文字）。
-
-> 完整的来源、采用形式与许可证清单见 [`skills/journal-drafting/credits-and-sources.md`](skills/journal-drafting/credits-and-sources.md) —— 这是本框架的「来源单一真相」。
-
----
-
-## 许可证
-
-- 本仓库**原创部分**（`skills/journal-drafting/`，含其自带的母版与风格层）以 **MIT** 发布，见根目录 [`LICENSE`](LICENSE)。
-- `skills/vendor/reference-checker/` 与 `skills/vendor/journal-adapt/` 各自遵循其原作者的 MIT 许可证。
-
-使用时请保留相应署名。欢迎提 issue / PR。
+使用和再分发时请保留相应署名。

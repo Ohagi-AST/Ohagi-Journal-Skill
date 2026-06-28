@@ -1,0 +1,7 @@
+interface:
+  display_name: "Journal Drafting"
+  short_description: "Economics manuscript drafting, review, and submission prep"
+  default_prompt: "Use $journal-drafting to draft, rewrite, or review my economics manuscript without inventing evidence."
+
+policy:
+  allow_implicit_invocation: true
